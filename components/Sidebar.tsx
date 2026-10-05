@@ -5,106 +5,49 @@ import Link from 'next/link';
 import { PanelLeft } from 'lucide-react';
 import { OsMark } from '@/components/OsMark';
 import { usePathname } from 'next/navigation';
-import { NAV_OPERATE, NAV_AGENTS, NAV_INTELLIGENCE, NAV_SYSTEM, NAV_LIBRARY, type NavItem } from '@/lib/nav';
-
-function NavGroup({
-  title,
-  items,
-  pathname,
-  collapsed,
-  onTip,
-}: {
-  title: string;
-  items: NavItem[];
-  pathname: string;
-  collapsed: boolean;
-  onTip: (tip: { label: string; y: number } | null) => void;
-}) {
-  return (
-    <>
-      {/* Collapsed keeps a divider where the group heading was, so the icon
-          runs still read as groups rather than one undifferentiated column. */}
-      {collapsed ? (
-        <div className="mx-2 my-1.5 border-t border-os-border" aria-label={title} />
-      ) : (
-        <div className="px-2.5 pb-1.5 pt-3.5 font-mono text-[9px] uppercase tracking-[0.18em] text-os-dim">
-          {title}
-        </div>
-      )}
-      {items.map(({ href, label, icon: Icon }) => {
-        const active = pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
-        return (
-          <Link
-            key={href}
-            href={href}
-            onMouseEnter={(e) =>
-              collapsed
-                ? onTip({ label, y: e.currentTarget.getBoundingClientRect().top })
-                : undefined
-            }
-            onMouseLeave={() => (collapsed ? onTip(null) : undefined)}
-            data-lens="r"
-            className={`pressable is-dark group relative flex items-center rounded-ctl border text-[13.5px] font-medium hover:translate-x-[2px] ${
-              collapsed ? 'justify-center px-0 py-[9px]' : 'gap-2.5 px-2.5 py-[7px]'
-            } ${
-              active
-                ? 'border-[var(--accent-line)] bg-[var(--accent-soft)] text-os-accent'
-                : 'border-transparent text-os-muted hover:text-os-text'
-            }`}
-          >
-            <Icon className="h-[15px] w-[15px] shrink-0 opacity-85" strokeWidth={1.7} />
-            {collapsed ? null : label}
-          </Link>
-        );
-      })}
-    </>
-  );
-}
+import { NAV_SHOPS, type NavItem } from '@/lib/nav';
 
 const COLLAPSED_W = 56;
 const MIN_W = 190;
 const MAX_W = 420;
 const DEFAULT_W = 232;
 
+function isActivePath(pathname: string, href: string) {
+  return pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
+}
+
 export function Sidebar() {
   const pathname = usePathname();
   const [live, setLive] = useState<{ up: number; total: number } | null>(null);
   const [host, setHost] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState(false);
-  // The nav scrolls, and any scrolling ancestor clips an absolutely positioned
-  // child — so the collapsed label is rendered fixed, outside that box.
-  const [tip, setTip] = useState<{ label: string; y: number } | null>(null);
+  const [expandedShop, setExpandedShop] = useState<string | null>(null);
   const [width, setWidth] = useState(DEFAULT_W);
+  const [tip, setTip] = useState<{ label: string; x: number; y: number } | null>(null);
   const dragging = useRef(false);
 
-  // Restore the previous shape before first paint of the nav, so the OS opens
-  // the way it was left rather than snapping after hydration.
   useEffect(() => {
-    const savedW = Number(localStorage.getItem('founderos.sidebar.w'));
+    const savedW = Number(localStorage.getItem('sectionos.sidebar.w'));
     if (Number.isFinite(savedW) && savedW >= MIN_W && savedW <= MAX_W) setWidth(savedW);
-    setCollapsed(localStorage.getItem('founderos.sidebar.collapsed') === '1');
+    setCollapsed(localStorage.getItem('sectionos.sidebar.collapsed') === '1');
   }, []);
 
-  // Where this instance actually is (localhost in dev, the deployed host
-  // name in production). Client-only: there is no location during SSR.
   useEffect(() => {
     setHost(window.location.host);
   }, []);
 
-  // A stale label must never hang around after the rail expands.
   useEffect(() => {
-    if (!collapsed) setTip(null);
-  }, [collapsed]);
+    const match = NAV_SHOPS.find((shop) => shop.items.some((item) => isActivePath(pathname, item.href)));
+    setExpandedShop(match ? match.id : null);
+  }, [pathname]);
 
-  // The shell's left margin reads this, so the page follows the sidebar
-  // instead of the width being duplicated in two places.
   useEffect(() => {
     const w = collapsed ? COLLAPSED_W : width;
     document.documentElement.style.setProperty('--sidebar-w', `${w}px`);
   }, [collapsed, width]);
 
   useEffect(() => {
-    localStorage.setItem('founderos.sidebar.collapsed', collapsed ? '1' : '0');
+    localStorage.setItem('sectionos.sidebar.collapsed', collapsed ? '1' : '0');
   }, [collapsed]);
 
   const onDragStart = useCallback(
@@ -113,7 +56,6 @@ export function Sidebar() {
       e.preventDefault();
       dragging.current = true;
       document.body.style.cursor = 'col-resize';
-      // Stop text selecting across the whole app while dragging.
       document.body.style.userSelect = 'none';
 
       const onMove = (ev: MouseEvent) => {
@@ -128,7 +70,7 @@ export function Sidebar() {
         window.removeEventListener('mousemove', onMove);
         window.removeEventListener('mouseup', onUp);
         setWidth((w) => {
-          localStorage.setItem('founderos.sidebar.w', String(w));
+          localStorage.setItem('sectionos.sidebar.w', String(w));
           return w;
         });
       };
@@ -155,6 +97,38 @@ export function Sidebar() {
     };
   }, []);
 
+  const renderNavItem = (item: NavItem) => {
+    const active = isActivePath(pathname, item.href);
+    const Icon = item.icon;
+    const label = item.label;
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        data-lens="r"
+        onMouseEnter={(e) => {
+          if (!collapsed) return;
+          const left = e.currentTarget.getBoundingClientRect().left;
+          const top = e.currentTarget.getBoundingClientRect().top;
+          const width = e.currentTarget.getBoundingClientRect().width;
+          const height = e.currentTarget.getBoundingClientRect().height;
+          setTip({ label, x: left + width / 2, y: top + height / 2 });
+        }}
+        onMouseLeave={() => {
+          if (!collapsed) setTip(null);
+        }}
+        className={`pressable is-dark group relative flex items-center rounded-ctl border text-[12.75px] font-medium transition-colors hover:translate-x-[2px] ${
+          active
+            ? 'border-[var(--accent-line)] bg-[var(--accent-soft)] text-os-accent'
+            : 'border-transparent text-os-muted hover:text-os-text'
+        } ${collapsed ? 'justify-center px-0 py-[8px]' : 'gap-2.5 px-2.5 py-[7px]'}`}
+      >
+        <Icon className="h-[14px] w-[14px] shrink-0 opacity-85" strokeWidth={1.7} />
+        {collapsed ? null : label}
+      </Link>
+    );
+  };
+
   return (
     <aside
       className="fixed inset-y-0 left-0 z-20 flex flex-col border-r border-os-border bg-os-bg2"
@@ -165,18 +139,15 @@ export function Sidebar() {
           collapsed ? 'flex-col items-center gap-2 px-0' : 'items-center justify-between px-[18px]'
         }`}
       >
-        {/* The emblem is the OS logo. Collapsed, it IS the identity — the
-            wordmark is gone, so the mark carries it and the toggle stacks
-            underneath (34px + a 28px button will not sit side by side in 56px). */}
         {collapsed ? (
           <OsMark size={30} className="shrink-0" />
         ) : (
           <div className="flex items-center gap-[11px]">
             <OsMark size={34} className="shrink-0" />
             <div>
-              <div className="text-[13px] font-bold tracking-[0.14em]">FOUNDER OS</div>
+              <div className="text-[13px] font-bold tracking-[0.14em]">SECTION OS</div>
               <div className="mt-[3px] whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.16em] text-os-dim">
-                v3 · Operator Mode
+                S-Shop mode
               </div>
             </div>
           </div>
@@ -193,13 +164,54 @@ export function Sidebar() {
           <PanelLeft className="h-[15px] w-[15px]" strokeWidth={1.7} />
         </button>
       </div>
-      <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2.5 pb-2">
-        <NavGroup title="Operate" items={NAV_OPERATE} pathname={pathname} collapsed={collapsed} onTip={setTip} />
-        <NavGroup title="Agents" items={NAV_AGENTS} pathname={pathname} collapsed={collapsed} onTip={setTip} />
-        <NavGroup title="Intelligence" items={NAV_INTELLIGENCE} pathname={pathname} collapsed={collapsed} onTip={setTip} />
-        <NavGroup title="System" items={NAV_SYSTEM} pathname={pathname} collapsed={collapsed} onTip={setTip} />
-        <NavGroup title="Variants" items={NAV_LIBRARY} pathname={pathname} collapsed={collapsed} onTip={setTip} />
-      </nav>
+
+      <div
+        className="relative flex-1 overflow-y-auto px-2.5 pb-2"
+        onMouseDown={onDragStart}
+        role="presentation"
+      >
+        {tip && (
+          <div
+            className="fixed z-50 -translate-x-1/2 -translate-y-1/2 rounded-ctl border border-os-border bg-os-bg px-2 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-os-text shadow-none"
+            style={{ left: tip.x + 18, top: tip.y + 8 }}
+          >
+            {tip.label}
+          </div>
+        )}
+        <div className="space-y-1.5">
+          {NAV_SHOPS.map((shop) => {
+            const isExpanded = !collapsed && expandedShop === shop.id;
+            const isActive = shop.items.some((item) => isActivePath(pathname, item.href));
+
+            return (
+              <div key={shop.id} className="rounded-ctl border border-transparent bg-transparent">
+                <button
+                  type="button"
+                  onClick={() => setExpandedShop((current) => (current === shop.id ? null : shop.id))}
+                  className={`pressable is-dark flex w-full items-center justify-between rounded-ctl border px-2.5 py-[10px] text-left font-mono transition-colors ${
+                    isActive
+                      ? 'border-[var(--accent-line)] bg-[var(--accent-soft)] text-os-accent'
+                      : 'border-transparent bg-transparent text-os-muted hover:border-os-border hover:text-os-text'
+                  } ${collapsed ? 'justify-center px-0' : ''}`}
+                  aria-expanded={isExpanded}
+                >
+                  <span className="uppercase tracking-[0.18em] text-[9px]">
+                    {collapsed ? shop.id.toUpperCase() : shop.label}
+                  </span>
+                  {!collapsed && (
+                    <span className="font-sans text-[10px] text-os-dim">{isExpanded ? '−' : '+'}</span>
+                  )}
+                </button>
+
+                {!collapsed && isExpanded && (
+                  <div className="mt-1.5 space-y-1 pl-2">{shop.items.map(renderNavItem)}</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div
         className={`flex flex-col gap-2 border-t border-os-border py-3.5 ${
           collapsed ? 'items-center px-0' : 'px-[18px]'
@@ -210,26 +222,12 @@ export function Sidebar() {
           {!collapsed && <>{live ? `${live.up}/${live.total}` : '—/—'} systems live</>}
         </div>
         {!collapsed && (
-          // The host is read at runtime: hardcoding localhost read as a lie the
-          // moment the OS was served from a remote host. Wraps rather than nowrap,
-          // which used to clip "real agents" off the edge of the rail.
           <div className="break-words font-mono text-[10px] leading-relaxed text-os-dim">
             {host ?? '…'} · sqlite · real agents
           </div>
         )}
       </div>
 
-      {collapsed && tip && (
-        <div
-          className="pointer-events-none fixed z-50 -translate-y-1/2 whitespace-nowrap rounded-sm-t border border-os-border-strong bg-os-surface px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-os-text"
-          style={{ left: COLLAPSED_W + 8, top: tip.y + 15 }}
-        >
-          {tip.label}
-        </div>
-      )}
-
-      {/* Drag the right edge to resize. Sits on the border itself with a wider
-          invisible hit area, so it is grabbable without being a visible bar. */}
       {!collapsed && (
         <div
           onMouseDown={onDragStart}

@@ -57,7 +57,7 @@ export async function localStackStatus(): Promise<ConnectorStatus> {
 
   const checks: Check[] = [
     { name: 'paperclip', up: paperclipBoard, detail: `agent board · ${paperclipUrl().replace(/^https?:\/\//, '')}` },
-    { name: 'hermes', up: hermesGateway, detail: `worker pool · ${hermesUrl().replace(/^https?:\/\//, '')}` },
+    { name: 'Operator', up: hermesGateway, detail: `worker pool · ${hermesUrl().replace(/^https?:\/\//, '')}` },
     {
       name: 'gbrain',
       up: Boolean(binExists(gbrainBin(), `${BREW}/gbrain`)),

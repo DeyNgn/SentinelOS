@@ -435,6 +435,12 @@ export function fitTopCam(layout: Layout, w: number): Cam {
   return { s, x: (w - b.w * s) / 2 - b.x * s, y: 24 - b.y * s };
 }
 
+/** Return the canvas to its normal 100% scale, centered and anchored at the top. */
+export function resetCam(layout: Layout, w: number): Cam {
+  const b = layout.bounds;
+  return { s: 1, x: (w - b.w) / 2 - b.x, y: 24 - b.y };
+}
+
 export function flyToCam(box: Box, s: number, w: number, hgt: number): Cam {
   const cx = box.x + box.w / 2;
   const cy = box.y + box.h / 2;
@@ -446,6 +452,13 @@ export function zoomCam(cam: Cam, f: number, px: number, py: number): Cam {
   const s = Math.max(0.12, Math.min(2.2, cam.s * f));
   const k = s / cam.s;
   return { s, x: px - (px - cam.x) * k, y: py - (py - cam.y) * k };
+}
+
+/** Vertical wheel/trackpad scroll zooms at the pointer; horizontal or Shift scroll pans. */
+export function wheelCam(cam: Cam, deltaX: number, deltaY: number, px: number, py: number, pan = false): Cam {
+  if (pan || deltaY === 0) return { ...cam, x: cam.x - deltaX, y: cam.y - deltaY };
+  const zoomed = zoomCam(cam, Math.exp(-deltaY * 0.0025), px, py);
+  return { ...zoomed, x: zoomed.x - deltaX };
 }
 
 export function isContainer(it: HAny): it is HContainer {

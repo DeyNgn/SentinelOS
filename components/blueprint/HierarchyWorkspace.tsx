@@ -45,6 +45,7 @@ export function HierarchyWorkspace({ graph, subline }: { graph: BlueprintGraph; 
   const ask = useRef<AskHandle>(null);
   const pendingFly = useRef<{ id: string; s: number } | null>(null);
   const pendingFit = useRef(false);
+  const pendingReset = useRef(false);
 
   const layout = useMemo(() => layoutHierarchy(h, expanded), [h, expanded]);
   const spine = useMemo(() => spineEdges(h, idx, layout), [h, idx, layout]);
@@ -68,6 +69,13 @@ export function HierarchyWorkspace({ graph, subline }: { graph: BlueprintGraph; 
 
   // camera moves that must wait for the new layout to commit
   useEffect(() => {
+    if (pendingReset.current) {
+      pendingReset.current = false;
+      pendingFly.current = null;
+      pendingFit.current = false;
+      canvas.current?.reset();
+      return;
+    }
     if (pendingFly.current) {
       const { id, s } = pendingFly.current;
       pendingFly.current = null;
@@ -108,8 +116,12 @@ export function HierarchyWorkspace({ graph, subline }: { graph: BlueprintGraph; 
         else next.add(id);
         return next;
       });
-      if (open && selected && idx.chain(selected).includes(id) && selected !== id) setSelected(id);
-      if (!open) pendingFly.current = { id, s: 0.85 };
+      if (open) {
+        if (selected && idx.chain(selected).includes(id) && selected !== id) setSelected(id);
+        pendingReset.current = true;
+      } else {
+        pendingFly.current = { id, s: 0.85 };
+      }
     },
     [expanded, selected, idx],
   );

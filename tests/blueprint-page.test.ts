@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
-import { NAV_AGENTS } from '@/lib/nav';
+import { NAV_PLANNING } from '@/lib/nav';
 
 const read = (p: string) => readFileSync(join(process.cwd(), p), 'utf8');
 
@@ -25,9 +25,8 @@ describe('/blueprint: present, reachable, honest', () => {
     }
   });
 
-  test('Blueprint sits in the Agents group right after the org chart', () => {
-    const hrefs = NAV_AGENTS.map((n) => n.href);
-    expect(hrefs.indexOf('/blueprint')).toBe(hrefs.indexOf('/org') + 1);
+  test('Blueprint sits in Planning after the roadmap', () => {
+    expect(NAV_PLANNING.map((n) => n.href)).toEqual(['/roadmap', '/blueprint']);
   });
 
   test('the ask route answers through the AI Gateway and is an honest 503 without it', () => {
@@ -38,8 +37,10 @@ describe('/blueprint: present, reachable, honest', () => {
     expect(route).not.toContain('wizard');
   });
 
-  test('the app node is Founder OS, never Slab', () => {
+  test('the app node is Section OS, never Slab', () => {
     expect(read('lib/blueprint/hierarchy.ts')).toContain("APP_ID = 'k-founder'");
+    expect(read('lib/blueprint/hierarchy.ts')).toContain("name: 'Section OS'");
+    expect(read('lib/blueprint/hierarchy.ts')).not.toContain("name: 'Founder OS'");
     expect(read('lib/blueprint/hierarchy.ts')).not.toMatch(/slab/i);
     expect(read('components/blueprint/AskBar.tsx')).not.toMatch(/slab/i);
   });

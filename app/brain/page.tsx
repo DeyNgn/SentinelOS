@@ -92,7 +92,7 @@ export default async function BrainPage() {
           talk, or drop documents. The graph owns everything under the title. */}
       <PageHeader
         eyebrow="knowledge core"
-        title="G-Brain"
+        title="Synapse"
         caret
         rightWide
         right={<BrainDump compact />}

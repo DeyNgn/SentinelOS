@@ -8,7 +8,7 @@ import type { PaperclipAgent } from '@/lib/connectors/paperclip';
  * existing nodes wear a live status.
  */
 export type LiveOrgOverlay = {
-  conductor: PaperclipAgent | null;
+  operator: PaperclipAgent | null;
   /** department id → its live board lead (only where a name matches) */
   byDepartment: Record<string, PaperclipAgent>;
   /** board agents with no pillar slot (Forge, Hermes Workers, …) */
@@ -21,19 +21,19 @@ export function overlayLiveOrg(
 ): LiveOrgOverlay {
   const byName = new Map(departments.map((d) => [d.name.toLowerCase(), d.id]));
   const byDepartment: Record<string, PaperclipAgent> = {};
-  let conductor: PaperclipAgent | null = null;
+  let operator: PaperclipAgent | null = null;
   const extras: PaperclipAgent[] = [];
   for (const agent of liveAgents) {
     const key = agent.name.toLowerCase();
     if (key === 'conductor') {
-      conductor = agent;
+      operator = agent;
     } else {
       const deptId = byName.get(key);
       if (deptId) byDepartment[deptId] = agent;
       else extras.push(agent);
     }
   }
-  return { conductor, byDepartment, extras };
+  return { operator, byDepartment, extras };
 }
 
 /** Status → dot classes for the live chip (matches the terminal design system). */

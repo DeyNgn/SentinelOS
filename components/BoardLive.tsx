@@ -67,6 +67,10 @@ function seatIconColor(agent: PaperclipAgent, live: boolean, idleColor: string):
   return idleColor;
 }
 
+function displaySeatName(name: string): string {
+  return name.toLowerCase() === 'conductor' ? 'Operator' : name;
+}
+
 /** Ticking elapsed clock under the spinner; parent supplies the real start. */
 function Elapsed({ since }: { since: number }) {
   const [, setTick] = useState(0);
@@ -175,8 +179,8 @@ function SeatChip({ agent, since }: { agent: PaperclipAgent; since: string | nul
           a complete one here; the title tooltips carry the full strings, and
           the header's model roster already lists every model in play. */}
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[11.5px] font-semibold leading-tight" title={agent.name}>
-          {agent.name}
+        <div className="truncate text-[11.5px] font-semibold leading-tight" title={displaySeatName(agent.name)}>
+          {displaySeatName(agent.name)}
         </div>
         <div
           className="truncate font-mono text-[9px] text-os-dim"
@@ -198,7 +202,7 @@ function SeatChip({ agent, since }: { agent: PaperclipAgent; since: string | nul
             {startedMs !== null && <Elapsed since={startedMs} />}
           </>
         ) : (
-          <span title={`Run ${agent.name} heartbeat on the board`}>
+          <span title={`Run ${displaySeatName(agent.name)} heartbeat on the board`}>
             <AsyncButton run={run} tone="ghost" failed={failed} showElapsed busyLabel="" doneLabel="" failLabel="">
               ▸
             </AsyncButton>
@@ -326,7 +330,7 @@ export function BoardLive({ initial, boardUrl }: { initial: BoardLivePayload; bo
                   <div key={r.id} data-lens="r" className="pressable is-row animate-enter flex items-baseline gap-1.5 rounded-ctl px-1 py-0.5 font-mono text-[9.5px] leading-snug">
                     <span className={`font-bold ${runColor(r.status)}`}>{runGlyph(r.status)}</span>
                     <span className="min-w-0 flex-1 truncate text-os-text">
-                      {r.agentName ?? nameById.get(r.agentId) ?? r.agentId.slice(0, 8)}
+                      {displaySeatName(r.agentName ?? nameById.get(r.agentId) ?? r.agentId.slice(0, 8))}
                     </span>
                     {/* The glyph already encodes a clean finish, so spelling
                         out 'succeeded' on every row just ate the width the

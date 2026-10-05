@@ -8,7 +8,7 @@ import { allConnectorStatuses } from '@/lib/connectors';
 import type { ConnectorStatus } from '@/lib/connectors/types';
 import { compileBlueprint } from '@/lib/blueprint/compile';
 import { validateGraph, type BlueprintGraph } from '@/lib/blueprint/graph';
-import { NAV_OPERATE, NAV_AGENTS, NAV_INTELLIGENCE, NAV_SYSTEM, NAV_LIBRARY } from '@/lib/nav';
+import { NAV_SHOPS } from '@/lib/nav';
 
 /**
  * Slab import, slice 4 (2026-09-17): /blueprint compiles the system map
@@ -59,7 +59,7 @@ describe('blueprint: the map cannot drift from the system', () => {
   test('the spine exists: the operator commands the Conductor; the Conductor commands every other agent', () => {
     const conductor = graph.nodes.find((n) => n.id === 'agent-conductor');
     expect(conductor?.kind).toBe('wizard');
-    expect(conductor?.name).toBe('Conductor');
+    expect(conductor?.name).toBe('Operator');
     expect(graph.edges.some((e) => e.from === 'operator' && e.to === 'agent-conductor' && e.kind === 'commands')).toBe(true);
     const commanded = graph.edges.filter((e) => e.from === 'agent-conductor' && e.kind === 'commands' && e.to.startsWith('agent-')).length;
     expect(commanded).toBe(db.agents.all().length - 1);
@@ -81,7 +81,7 @@ describe('blueprint: the map cannot drift from the system', () => {
   });
 
   test('completeness: every NAV surface appears as a layer-3 surface node with its route as a fact', () => {
-    const all = [...NAV_OPERATE, ...NAV_AGENTS, ...NAV_INTELLIGENCE, ...NAV_SYSTEM, ...NAV_LIBRARY];
+    const all = NAV_SHOPS.flatMap((shop) => shop.items);
     for (const item of all) {
       const node = graph.nodes.find((n) => n.kind === 'surface' && n.facts.route === item.href);
       expect(node, item.href).toBeDefined();

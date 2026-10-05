@@ -59,12 +59,12 @@ describe('⌘K palette mock-4a: the rows', () => {
   test('the empty state arrives the same way and offers the Conductor', () => {
     const empty = list.slice(list.indexOf('rows.length === 0'), list.indexOf('border-t border-os-border'));
     expect(empty).toContain('animate-enter');
-    expect(empty).toContain('press ↵ to ask the Conductor instead');
+    expect(empty).toContain('press ↵ to ask Operator instead');
   });
 
   test('the footer LED blinks on the 2.6s step, next to the listening line', () => {
     expect(p).toContain('animate-blink');
-    expect(p).toContain('Conductor listening');
+    expect(p).toContain('Operator listening');
     expect(read('tailwind.config.ts')).toContain("blink: 'om-blink 2.6s steps(1) infinite'");
   });
 });

@@ -249,7 +249,7 @@ describe('BoardLive wiring contracts', () => {
       // Compact wins; hover reveals the rest, and the header roster already
       // lists every model in play.
       expect(src).toMatch(/truncate text-\[11\.5px\] font-semibold/);
-      expect(src).toContain('title={agent.name}');
+      expect(src).toContain('title={displaySeatName(agent.name)}');
       expect(src).not.toMatch(/break-words text-\[11px\] font-semibold/);
     });
 

@@ -4,7 +4,7 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffec
 import { ChevronDown } from 'lucide-react';
 import type { Hierarchy, HierarchyIndex, HContainer, HGroup } from '@/lib/blueprint/hierarchy';
 import { KIND_ICON } from '@/lib/blueprint/hierarchy';
-import { fitAllCam, fitTopCam, flyToCam, GRID, rep, roundedPath, zoomCam, type Box, type Cam, type DrawnEdge, type Layout } from '@/lib/blueprint/hierarchy-layout';
+import { fitAllCam, fitTopCam, flyToCam, GRID, rep, resetCam, roundedPath, wheelCam, zoomCam, type Box, type Cam, type DrawnEdge, type Layout } from '@/lib/blueprint/hierarchy-layout';
 import { HierarchyNode } from './HierarchyNode';
 import { iconFor } from './icons';
 
@@ -13,6 +13,7 @@ export type FocusMode = { mode: 'none' } | { mode: 'filter'; match: Set<string> 
 export interface CanvasHandle {
   fitAll: (animate?: boolean) => void;
   fitTop: () => void;
+  reset: () => void;
   flyTo: (id: string, s: number) => void;
   zoomBy: (f: number) => void;
   /** run a flare along a structural edge; resolves when it arrives */
@@ -111,6 +112,7 @@ export const HierarchyCanvas = forwardRef<CanvasHandle, Props>(function Hierarch
         cam.current = fitTopCam(layoutRef.current, view().w);
         applyCam();
       },
+      reset: () => tween(resetCam(layoutRef.current, view().w), 260),
       flyTo: (id, s) => {
         const b = rep(layoutRef.current, idx, id);
         if (!b) return;
@@ -169,7 +171,7 @@ export const HierarchyCanvas = forwardRef<CanvasHandle, Props>(function Hierarch
   }, []);
 
   // ── pointer: pan, zoom, glow spot ───────────────────────────────────
-  const isChrome = (t: EventTarget | null) => !!(t as HTMLElement | null)?.closest?.('.bh-node, .bh-frame-head, .bh-ch');
+  const isChrome = (t: EventTarget | null) => !!(t as HTMLElement | null)?.closest?.('.bh-node, .bh-frame-head, .bh-ch, .bh-hud');
   const onPointerDown = (ev: RPointerEvent<HTMLDivElement>) => {
     if (ev.button !== 0 || isChrome(ev.target)) return;
     panning.current = { x: ev.clientX, y: ev.clientY, cx: cam.current.x, cy: cam.current.y, moved: false };
@@ -200,11 +202,7 @@ export const HierarchyCanvas = forwardRef<CanvasHandle, Props>(function Hierarch
     const c = canvasRef.current;
     if (!c) return;
     const r = c.getBoundingClientRect();
-    if (ev.ctrlKey || ev.metaKey) cam.current = zoomCam(cam.current, Math.exp(-ev.deltaY * 0.01), ev.clientX - r.left, ev.clientY - r.top);
-    else {
-      cam.current.x -= ev.deltaX;
-      cam.current.y -= ev.deltaY;
-    }
+    cam.current = wheelCam(cam.current, ev.deltaX, ev.deltaY, ev.clientX - r.left, ev.clientY - r.top, ev.shiftKey);
     applyCam();
   };
   // wheel must be non-passive to stop the page from scrolling under the map

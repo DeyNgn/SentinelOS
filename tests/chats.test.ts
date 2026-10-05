@@ -5,11 +5,12 @@ import { openDb, type FounderDb } from '@/lib/db';
 import { seedDatabase } from '@/lib/seed';
 import { conversationSummaries, type ConversationSummary } from '@/lib/chats';
 import type { AgentMessage } from '@/lib/schemas';
+import { NAV_SHOPS } from '@/lib/nav';
 
 const read = (p: string) => readFileSync(join(process.cwd(), p), 'utf8');
 
 /**
- * /chats (the operator, 2026-08-17): a Claude-style chat hub under Agents — every
+ * /chats (the operator, 2026-08-17): a Claude-style chat hub under Communications — every
  * conversation in one list (the board Conductor pinned first), open any of
  * them, and talk to any agent directly.
  */
@@ -105,10 +106,10 @@ describe('the /chats surface', () => {
     expect(hub).toContain('PanelLeft');
   });
 
-  test('Chats sits in the sidebar under Agents', () => {
-    const nav = read('lib/nav.ts');
-    expect(nav).toContain("href: '/chats'");
-    const agentsBlock = nav.slice(nav.indexOf('NAV_AGENTS'), nav.indexOf('NAV_INTELLIGENCE'));
-    expect(agentsBlock).toContain("'/chats'");
+  test('Chats sits in S6 Communications, not Personnel', () => {
+    const s6 = NAV_SHOPS.find((shop) => shop.id === 's6');
+    const s1 = NAV_SHOPS.find((shop) => shop.id === 's1');
+    expect(s6?.items.some((item) => item.href === '/chats')).toBe(true);
+    expect(s1?.items.some((item) => item.href === '/chats')).toBe(false);
   });
 });

@@ -21,7 +21,7 @@ const STATUS_TONE: Record<string, string> = {
   blocked: 'var(--err)',
 };
 
-const ROUTES = ['Conductor routes', 'TECH', 'Sales'] as const;
+const ROUTES = ['Operator routes', 'TECH', 'Sales'] as const;
 type Route = (typeof ROUTES)[number];
 
 function ago(iso: string | null): string {
@@ -44,7 +44,7 @@ const pillStyle = (status: string) => {
 export function BoardTasks({ initialIssues, boardUrl, i = 7 }: { initialIssues: PaperclipIssue[]; boardUrl: string | null; i?: number }) {
   const [issues, setIssues] = useState(initialIssues);
   const [title, setTitle] = useState('');
-  const [route, setRoute] = useState<Route>('Conductor routes');
+  const [route, setRoute] = useState<Route>('Operator routes');
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +59,7 @@ export function BoardTasks({ initialIssues, boardUrl, i = 7 }: { initialIssues: 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: t,
-          ...(route === 'Conductor routes' ? {} : { description: `Route to the ${route} pillar.` }),
+          ...(route === 'Operator routes' ? {} : { description: `Route to the ${route} pillar.` }),
         }),
       });
       const body = (await res.json()) as { issue?: PaperclipIssue; error?: string };
@@ -94,7 +94,7 @@ export function BoardTasks({ initialIssues, boardUrl, i = 7 }: { initialIssues: 
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && create()}
-            placeholder="Hand the company work · one line · the Conductor routes it"
+            placeholder="Hand the company work · one line · Operator routes it"
             className="min-w-0 flex-1 rounded-full border border-os-border bg-os-bg px-4 py-2 text-[13px] text-os-text placeholder:text-os-dim focus:border-os-border-strong focus:outline-none"
           />
           <button

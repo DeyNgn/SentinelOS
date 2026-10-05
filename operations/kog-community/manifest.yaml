@@ -1,0 +1,13 @@
+id: kog-community
+name: KOG Community
+active: true
+shops:
+  - S6 Communications
+  - S7 Influence
+required_tools:
+  - social
+  - discord
+  - telegram
+agent_swarms:
+  - Community Pulse
+  - Growth Reactor

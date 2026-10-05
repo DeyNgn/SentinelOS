@@ -104,7 +104,7 @@ export default async function OrgChartPage({ searchParams }: { searchParams?: { 
       {/* Live board strip — the REAL org (Paperclip over the private network). Only
           renders when the board answered; extras are agents with no pillar
           slot (Forge, Hermes Workers, …). */}
-      {(liveOrg.conductor || liveOrg.extras.length > 0) && (
+      {(liveOrg.operator || liveOrg.extras.length > 0) && (
         <Rise i={1} className="mb-3 flex flex-wrap items-center gap-2 rounded-panel border border-os-border bg-os-surface px-3 py-2">
           <span className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.2em] text-os-muted">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-os-ok" />
@@ -167,7 +167,7 @@ export default async function OrgChartPage({ searchParams }: { searchParams?: { 
             ))}
           </ul>
           <div className="mt-2 font-mono text-[10px] text-os-dim">
-            G-Brain tag: #{venture.brainTag} · {ventureSet?.size} agents on this venture
+            Synapse tag: #{venture.brainTag} · {ventureSet?.size} agents on this venture
           </div>
         </Rise>
       )}
@@ -186,19 +186,19 @@ export default async function OrgChartPage({ searchParams }: { searchParams?: { 
       {/* Operator */}
       <Rise i={5} className="flex flex-col items-center">
         <Users className="h-7 w-7 text-os-text" />
-        <div className="mt-1 text-base font-bold tracking-wide">Alex</div>
+        <div className="mt-1 text-base font-bold tracking-wide">Commander</div>
         <div className="text-[10px] uppercase tracking-[0.3em] text-os-dim">Operator</div>
         <div className="mt-2 h-6 w-px bg-os-border-bright" />
         <div className="flex items-center gap-2">
-          <span className="text-[10px] uppercase tracking-[0.2em] text-os-muted">Conductor (Super Agent)</span>
-          {liveOrg.conductor && <LiveChip agent={liveOrg.conductor} />}
+          <span className="text-[10px] uppercase tracking-[0.2em] text-os-muted">Operator (Super Agent)</span>
+          {liveOrg.operator && <LiveChip agent={liveOrg.operator} />}
         </div>
         <div className="h-3 w-px bg-os-border-bright" />
       </Rise>
 
-      {/* AI Head row: G-Brain ── Conductor ── Comms Feed */}
+      {/* AI Head row: Synapse ── Conductor ── Comms Feed */}
       <Rise i={6} className="flex items-center justify-center gap-0">
-        <SystemCard href="/brain" title="G-Brain" caption="markdown + pgvector knowledge store" />
+        <SystemCard href="/brain" title="Synapse" caption="markdown + pgvector knowledge store" />
         <div className="hidden h-px w-10 bg-os-border-bright md:block" />
         {conductor ? (
           <ConductorCard conductor={conductor} agentNames={agentNames} initialBroadcast={lastBroadcast} />

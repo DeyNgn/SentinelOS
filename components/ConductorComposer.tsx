@@ -172,7 +172,7 @@ export function ConductorComposer({
           Enter sends · Shift+Enter breaks
         </span>
         {model && (
-          <span className="ml-auto mr-1 font-mono text-[10px] text-os-dim" title="the model holding the Conductor seat right now">
+          <span className="ml-auto mr-1 font-mono text-[10px] text-os-dim" title="the model holding the Operator seat right now">
             {model}
           </span>
         )}

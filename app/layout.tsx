@@ -20,8 +20,8 @@ const fontMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'FOUNDER OS',
-  description: 'Personal operating system and AI agent command center for a single person company',
+  title: 'Section OS',
+  description: 'Section OS operations command center for a modern engineering and operations shop',
 };
 
 /** The palette builds its own Go-to group from lib/nav; the layout only feeds
@@ -44,16 +44,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Toaster>
         <LensProvider />
         <Sidebar />
-        {/* os-shell yields to the Conductor dock: the panel sets --conductor-w
-            and the whole content column glides left instead of being covered */}
         <div className="os-shell flex min-h-screen min-w-0 flex-col" style={{ marginLeft: 'var(--sidebar-w, 232px)', marginRight: 'var(--conductor-w, 0px)' }}>
+          <div className="border-b border-os-border bg-os-surface/90 px-6 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-os-accent">
+            UNCLASSIFIED // CUI ENCLAVE
+          </div>
           <Topbar />
           <main className="min-w-0 flex-1 px-8 pb-16 pt-7 wide:px-10 ultra:px-12">
-            {/* Width tiers: 1280 on laptops · 1760 on large monitors ·
-                full-bleed on 32"/ultrawide. See tailwind screens wide/ultra. */}
             <div className="mx-auto max-w-[1280px] wide:max-w-[1760px] ultra:max-w-none">
               {children}
-              {/* Cohort invite — last thing on every view, by construction */}
               <CohortBanner />
             </div>
           </main>

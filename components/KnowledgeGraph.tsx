@@ -57,7 +57,7 @@ const RIM_DELTA_DEG = (WHEEL_GEOM.delta * 180) / Math.PI;
 const CAT: Record<KGNodeKind, { color: string; Icon: LucideIcon; label: string; r: number }> = {
   self: { color: 'var(--text)', Icon: Sparkles, label: 'Obsidian', r: 18 },
   team: { color: 'var(--brain-1)', Icon: Users, label: 'Pillars', r: 15 },
-  // live Paperclip seats (Conductor, Forge, …) — the symmetric inner ring,
+  // live Paperclip seats (Operator, Forge, …) — the symmetric inner ring,
   // wearing the OS emblem in white, deliberately no green
   board: { color: 'var(--text)', Icon: OsMarkGlyph, label: 'Board agents', r: 10 },
   task: { color: 'var(--muted)', Icon: ClipboardList, label: 'SOP tasks', r: 7 },
@@ -84,6 +84,7 @@ const TIER_OPACITY: Record<KGNodeKind, number> = {
 const LEGEND_KINDS: KGNodeKind[] = ['team', 'board', 'task', 'person', 'employee', 'tool'];
 
 const nodeColor = (n: KGNode) => (n.color ? themedNodeColor(n.color) : CAT[n.kind].color);
+const boardDisplayName = (name: string) => (name.toLowerCase() === 'conductor' ? 'Operator' : name);
 
 // Each segment of the chain gets its own visible colour: the operator → department
 // (white) → SOP tasks (muted) → the worker who does the job (accent) → tools
@@ -1777,7 +1778,7 @@ export function KnowledgeGraph({
     const live = boardAgents.find((a) => `board:${a.id}` === selectedBoardId) ?? null;
     return (
       <HeadDetailCard
-        title={node.label}
+        title={boardDisplayName(node.label)}
         deptName="Paperclip board"
         roleLabel="board agent"
         blurb={
@@ -2493,7 +2494,7 @@ export function KnowledgeGraph({
                 onNodeClick(n);
               }}
             >
-              <title>{n.label}</title>
+              <title>{n.kind === 'board' ? boardDisplayName(n.label) : n.label}</title>
               {/* selection echoes the vault's orange — one visual language
                   between the core and the outlined outer nodes */}
               {selected && <circle r={r + 3.5} fill="none" stroke={HUB_COLOR} strokeWidth={1} opacity={0.4} />}

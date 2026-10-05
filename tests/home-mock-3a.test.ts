@@ -22,7 +22,7 @@ describe('/ mock-3a: the queue is the Conductor queue', () => {
   const list = read('components/NeedsYouList.tsx');
 
   test('the section says who ranked it and how', () => {
-    expect(list).toContain('ranked by the Conductor');
+    expect(list).toContain('ranked by the Operator');
     expect(list).toContain('people first, then deadlines');
   });
 
@@ -38,7 +38,7 @@ describe('/ mock-3a: the queue is the Conductor queue', () => {
 
   test('the empty state is the mock line, not the old paragraph', () => {
     expect(list).toContain('Nothing needs you.');
-    expect(list).toContain('the Conductor will surface the next thing here');
+    expect(list).toContain('the Operator will surface the next thing here');
     expect(list).not.toContain('Nothing is waiting on you.');
   });
 

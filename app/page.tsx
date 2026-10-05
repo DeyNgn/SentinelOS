@@ -82,6 +82,10 @@ function greeting(): string {
   return 'Good evening';
 }
 
+function operatorLabel(): string {
+  return process.env.FOUNDER_OPERATOR_NAME?.trim() || process.env.DEY_OPERATOR_NAME?.trim() || 'Commander';
+}
+
 function relativeTime(iso: string): string {
   const ms = Date.now() - new Date(iso).getTime();
   if (!Number.isFinite(ms) || ms < 0) return 'just now';
@@ -222,7 +226,7 @@ export default async function HomePage() {
     <div className="os-slab">
       <SlabTitle
         eyebrow="command center"
-        title={`${greeting()}, Alex`}
+        title={`${greeting()}, ${operatorLabel()}`}
         meta={
           /* Honest state-of-the-world line  -  what needs you, straight from live data */
           <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px]">
@@ -262,7 +266,7 @@ export default async function HomePage() {
         />
         <StatTile
           href="/brain"
-          label="G-Brain health"
+          label="Synapse health"
           value={health == null ? ' - ' : <CountUp value={health} />}
           unit={`/ 100${overview.doctor.connected ? ` · ${overview.doctor.status}` : ' · offline'}`}
           valueClass="text-os-accent"

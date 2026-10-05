@@ -23,12 +23,12 @@ describe('local stack checks the real stack', () => {
     expect(src).not.toContain("'tmux',"); // the shelled-out command
   });
 
-  test('Hermes replaces OpenClaw, on the gateway port', () => {
-    expect(src).toContain("name: 'hermes'");
+  test('Commander replaces OpenClaw on the Hermes gateway port', () => {
+    expect(src).toContain("name: 'Commander'");
     expect(src).toContain('8642');
   });
 
-  test('Paperclip replaces tmux, on the board port', () => {
+  test('Paperclip replaces tmux on the board port', () => {
     expect(src).toContain("name: 'paperclip'");
     expect(src).toContain('3100');
   });
@@ -39,7 +39,7 @@ describe('local stack checks the real stack', () => {
     }
     // no self-check: it reported DOWN on the host while serving the page
     expect(src).not.toContain("name: 'founder-os'");
-    for (const real of ['paperclip', 'hermes', 'gbrain', 'ffmpeg', 'pdftotext', 'gh']) {
+    for (const real of ['paperclip', 'Commander', 'gbrain', 'ffmpeg', 'pdftotext', 'gh']) {
       expect(src, real).toContain(`name: '${real}'`);
     }
   });

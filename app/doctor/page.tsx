@@ -132,7 +132,7 @@ export default async function DoctorPage() {
                 {doctor.connected ? (warnings > 0 ? `${warnings} warnings` : 'all green') : 'unreachable'}
               </Chip>
               <Link href="/brain" className={PILL}>
-                G-Brain
+                Synapse
               </Link>
               <DoctorRerun />
             </>

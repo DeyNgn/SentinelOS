@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * First-run welcome pop-up. The first time someone clones the demo, runs
- * `npm run dev` and lands on the home screen, this greets them and points at
- * the FounderOS cohort. Dismissal persists to localStorage, so it appears
- * once per browser and never nags again — the footer CTA (`CohortBanner`)
- * carries the same invite permanently on every view.
+ * First-run welcome pop-up. The first time someone opens the local shell and
+ * lands on the home screen, this greets them and points at the Dey Engineering
+ * home page. Dismissal persists to localStorage, so it appears once per browser
+ * and never nags again — the footer CTA (`CohortBanner`) carries the same
+ * invite permanently on every view.
  */
 import { useCallback, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
@@ -63,7 +63,7 @@ export function CohortModal() {
       >
         <div className="flex items-start justify-between border-b border-os-border px-5 py-3.5">
           <div className="page-eyebrow flex items-center gap-2 pt-1 font-mono text-[9.5px] uppercase tracking-[0.32em] text-os-dim">
-            FounderOS Cohort
+            Dey Engineering
           </div>
           <button
             type="button"
@@ -80,15 +80,14 @@ export function CohortModal() {
             id="cohort-modal-title"
             className="text-[20px] font-bold uppercase leading-[1.15] tracking-[0.06em]"
           >
-            Build this for real
+            Live operations shell
           </h2>
           <p className="mt-3 font-mono text-[12px] leading-relaxed text-os-muted">
-            You&apos;re running the FounderOS demo locally — the operator console, the agent
-            roster, the knowledge core, all of it.
+            You&apos;re running the SectionOS operations shell locally — the live operator console,
+            the connected agent roster, and the active mission stack.
           </p>
           <p className="mt-3 font-mono text-[12px] leading-relaxed text-os-muted">
-            Want help setting this up? Go to the FounderOS cohort to learn how to build the entire
-            thing end-to-end and get it into production.
+            Keep the operating system aligned with the active operator and mission.
           </p>
 
           <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -99,7 +98,7 @@ export function CohortModal() {
               onClick={dismiss}
               className="inline-flex items-center justify-center gap-1.5 rounded-sm-t border border-os-accent bg-os-accent px-4 py-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-os-ink transition-opacity hover:opacity-90"
             >
-              Join the cohort — founderos.example.com
+              Open Dey Engineering — deyengineering.com/home
               <ArrowUpRight className="h-3 w-3" />
             </a>
             <button
