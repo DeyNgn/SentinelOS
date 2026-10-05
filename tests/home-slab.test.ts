@@ -24,7 +24,7 @@ describe('Home: the Brand Deals slab, all the way down', () => {
     for (const p of ['card', 'card-head', 'row']) expect(list, p).toContain(`data-part="${p}"`);
     const composer = read('components/InterjectComposer.tsx');
     for (const p of ['card', 'card-head', 'input']) expect(composer, p).toContain(`data-part="${p}"`);
-    const page = read('app/page.tsx');
+    const page = read('components/OverviewDashboard.tsx');
     for (const p of ['card', 'card-head', 'row', 'tile']) expect(page, p).toContain(`data-part="${p}"`);
   });
 

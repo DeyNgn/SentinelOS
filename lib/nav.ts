@@ -39,7 +39,7 @@ export type NavShop = {
 };
 
 export const NAV_OPERATE: NavItem[] = [
-  { href: '/', label: 'Home', icon: Home },
+  { href: '/overview', label: 'Overview', icon: Home },
   { href: '/workflows', label: 'Workflows', icon: Workflow },
   { href: '/funnel', label: 'Funnel', icon: Filter },
   { href: '/adpilot', label: 'AdPilot', icon: Crosshair },
@@ -104,6 +104,8 @@ export const NAV_ORDER: string[] = NAV_SHOPS.flatMap((shop) => shop.items.map((n
 
 /** Sidebar hierarchy for the current path, with any deeper route segments appended. */
 export function navBreadcrumbs(pathname: string): string[] {
+  if (pathname === '/') return ['Operator'];
+
   let match: { shop: NavShop; item: NavItem } | null = null;
   for (const shop of NAV_SHOPS) {
     for (const item of shop.items) {

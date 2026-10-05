@@ -22,10 +22,17 @@ describe('shared nav config', () => {
     expect(s9.items.map((item) => item.href)).toEqual(['/personas']);
   });
 
+  test('Overview is the S3 dashboard and Operator stays outside the shops', () => {
+    const s3 = NAV_SHOPS.find((shop) => shop.id === 's3')!;
+    expect(s3.items[0]).toMatchObject({ href: '/overview', label: 'Overview' });
+    expect(NAV_ORDER).not.toContain('/');
+    expect(navBreadcrumbs('/')).toEqual(['Operator']);
+  });
+
   test('each sidebar breadcrumb uses the owning shop, item label, and nested route', () => {
     expect(navBreadcrumbs('/comms')).toEqual(['S6 Communications', 'Comms']);
     expect(navBreadcrumbs('/agents/commander')).toEqual(['S1 Personnel', 'Agents', 'Commander']);
-    expect(navBreadcrumbs('/')).toEqual(['S3 Operations', 'Home']);
+    expect(navBreadcrumbs('/')).toEqual(['Operator']);
   });
 
   test('digit shortcuts (1–9) map to the first 9 views in visible order', () => {

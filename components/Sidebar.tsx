@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { PanelLeft } from 'lucide-react';
+import { MessageSquare, PanelLeft } from 'lucide-react';
 import { OsMark } from '@/components/OsMark';
 import { usePathname } from 'next/navigation';
 import { NAV_SHOPS, type NavItem } from '@/lib/nav';
@@ -164,6 +164,24 @@ export function Sidebar() {
           <PanelLeft className="h-[15px] w-[15px]" strokeWidth={1.7} />
         </button>
       </div>
+
+      <Link
+        href="/"
+        title="Open Operator chat"
+        aria-label="Operator chat"
+        aria-current={pathname === '/' ? 'page' : undefined}
+        className={`mx-2 mb-3 flex shrink-0 items-center rounded-ctl border border-cyan-300/25 bg-cyan-950/30 text-cyan-100 transition-colors hover:border-cyan-200/60 hover:bg-cyan-950/60 ${
+          collapsed ? 'justify-center px-0 py-3' : 'gap-3 px-3 py-2.5'
+        } ${pathname === '/' ? 'border-cyan-200/70 bg-cyan-900/50' : ''}`}
+      >
+        <MessageSquare className="h-4 w-4 shrink-0 text-cyan-200" strokeWidth={1.7} />
+        {!collapsed && (
+          <span className="min-w-0">
+            <span className="block font-mono text-[10px] font-semibold uppercase tracking-[0.16em]">Operator</span>
+            <span className="mt-0.5 block font-mono text-[8px] uppercase tracking-[0.14em] text-cyan-100/60">Chat · voice</span>
+          </span>
+        )}
+      </Link>
 
       <div
         className="relative flex-1 overflow-y-auto px-2.5 pb-2"

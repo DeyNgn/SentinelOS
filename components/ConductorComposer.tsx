@@ -4,6 +4,8 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { AudioLines, Mic, Plus, Send, X } from 'lucide-react';
 import { COMPOSER_MAX_PX, composerHeight } from '@/lib/composer';
 
+export type VoiceActivity = { mode: 'idle' | 'listening' | 'speaking'; intensity: number };
+
 /**
  * The Claude-style composer, shared by every Conductor surface (the operator, *: "give the conductor text bar the same capabilities... do the * same thing with the conductor board"). Multiline (Enter sends, Shift+Enter
  * breaks), (+) attaches a text file whose contents ride into the message
@@ -22,6 +24,7 @@ export function ConductorComposer({
   placeholder = 'Message the CEO…',
   lastReply = null,
   onError,
+  onVoiceActivity,
 }: {
   onSend: (message: string, display: string) => void | Promise<void>;
   disabled?: boolean;
@@ -30,6 +33,7 @@ export function ConductorComposer({
   /** the latest assistant text, for the read-aloud button */
   lastReply?: string | null;
   onError?: (message: string) => void;
+  onVoiceActivity?: (activity: VoiceActivity) => void;
 }) {
   const [input, setInput] = useState('');
   const [attachment, setAttachment] = useState<{ name: string; text: string } | null>(null);
@@ -98,13 +102,22 @@ export function ConductorComposer({
       let heard = '';
       for (const r of e.results) heard += r[0].transcript;
       setInput((dictationBaseRef.current ? `${dictationBaseRef.current} ` : '') + heard);
+      const current = e.results[e.results.length - 1]?.[0]?.transcript ?? heard;
+      onVoiceActivity?.({ mode: 'listening', intensity: Math.min(1, 0.2 + current.trim().length / 24) });
     };
-    rec.onend = () => setListening(false);
-    rec.onerror = () => setListening(false);
+    rec.onend = () => {
+      setListening(false);
+      onVoiceActivity?.({ mode: 'idle', intensity: 0 });
+    };
+    rec.onerror = () => {
+      setListening(false);
+      onVoiceActivity?.({ mode: 'idle', intensity: 0 });
+    };
     /* eslint-enable @typescript-eslint/no-explicit-any */
     rec.start();
     recRef.current = rec;
     setListening(true);
+    onVoiceActivity?.({ mode: 'listening', intensity: 0.18 });
   }
 
   // Read the latest reply aloud (toggle) — the wave button.
@@ -112,14 +125,27 @@ export function ConductorComposer({
     if (speaking) {
       speechSynthesis.cancel();
       setSpeaking(false);
+      onVoiceActivity?.({ mode: 'idle', intensity: 0 });
       return;
     }
     if (!lastReply || !('speechSynthesis' in window)) return;
     const u = new SpeechSynthesisUtterance(lastReply);
-    u.onend = () => setSpeaking(false);
-    u.onerror = () => setSpeaking(false);
+    u.onboundary = (event) => {
+      const char = lastReply[event.charIndex] ?? '';
+      const intensity = /[aeiou]/i.test(char) ? 0.9 : /\s/.test(char) ? 0.25 : 0.55;
+      onVoiceActivity?.({ mode: 'speaking', intensity });
+    };
+    u.onend = () => {
+      setSpeaking(false);
+      onVoiceActivity?.({ mode: 'idle', intensity: 0 });
+    };
+    u.onerror = () => {
+      setSpeaking(false);
+      onVoiceActivity?.({ mode: 'idle', intensity: 0 });
+    };
     speechSynthesis.speak(u);
     setSpeaking(true);
+    onVoiceActivity?.({ mode: 'speaking', intensity: 0.4 });
   }
 
   return (

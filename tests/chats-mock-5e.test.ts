@@ -69,6 +69,19 @@ describe('/chats mock-5e: Conductor header goes to the board', () => {
   });
 });
 
+describe('Operator voice activity drives the neural landing node', () => {
+  test('dictation and read-aloud publish activity through the shared chat composer', () => {
+    const composer = read('components/ConductorComposer.tsx');
+    const chat = read('components/ConductorChat.tsx');
+    const home = read('components/OperatorHome.tsx');
+    expect(composer).toContain("mode: 'listening'");
+    expect(composer).toContain('u.onboundary');
+    expect(composer).toContain("mode: 'speaking'");
+    expect(chat).toContain('onVoiceActivity={onVoiceActivity}');
+    expect(home).toContain('<NeuralOrb activity={activity}');
+  });
+});
+
 describe('/chats mock-5e: composer states its keys', () => {
   test('Enter sends, Shift+Enter breaks · said out loud', () => {
     expect(read('components/ConductorComposer.tsx')).toContain('Enter sends · Shift+Enter breaks');

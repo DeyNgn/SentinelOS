@@ -86,7 +86,7 @@ describe('/ mock-3a: a row is answerable in place', () => {
 });
 
 describe('/ mock-3a: the console itself', () => {
-  const page = read('app/page.tsx');
+  const page = read('components/OverviewDashboard.tsx');
 
   test('the four pulse tiles count in', () => {
     expect(page).toContain('CountUp');
@@ -107,7 +107,7 @@ describe('/ mock-3a: the console itself', () => {
 
 describe('/ mock-3a: radius rule', () => {
   const list = read('components/NeedsYouList.tsx');
-  const page = read('app/page.tsx');
+  const page = read('components/OverviewDashboard.tsx');
 
   test('floating surfaces use the rebrand radii, nothing animates a corner', () => {
     expect(list).not.toContain('rounded-2xl');
@@ -135,7 +135,7 @@ describe('/ mock-3a: radius rule', () => {
  * spec. Nothing here invents a number the repos cannot answer.
  */
 describe('mock-3a: the pulse tiles are bar cells, not line sparks', () => {
-  const home = read('app/page.tsx');
+  const home = read('components/OverviewDashboard.tsx');
   const terminal = read('components/terminal.tsx');
 
   test('agents and comms use the bar-cell foot, not the line Spark', () => {
@@ -202,14 +202,15 @@ describe('mock-3a: the composer names its destinations', () => {
 });
 
 describe('mock-3a: the ledger uses the artboard glyphs', () => {
-  const home = read('app/page.tsx');
+  const home = read('components/OverviewDashboard.tsx');
 
   test('a finished run is a ✓, a payment is a $', () => {
     expect(home).toContain("head: '✓'");
     expect(home).toContain("head: '$'");
   });
 
-  test('the eyebrow is the artboard\'s', () => {
-    expect(home).toContain('eyebrow="command center"');
+  test('the dashboard is titled Overview and keeps its greeting as the eyebrow', () => {
+    expect(home).toContain('title="Overview"');
+    expect(home).toContain('eyebrow={`${greeting()}, ${operatorLabel()}`}');
   });
 });

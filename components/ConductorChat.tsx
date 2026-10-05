@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { ConductorEmblem } from '@/components/ConductorEmblem';
-import { ConductorComposer } from '@/components/ConductorComposer';
+import { ConductorComposer, type VoiceActivity } from '@/components/ConductorComposer';
 import { Synthesizing } from '@/components/Synthesizing';
 
 /**
@@ -28,6 +28,7 @@ export function ConductorChat({
   model = null,
   boardUrl = null,
   bare = false,
+  onVoiceActivity,
 }: {
   model?: string | null;
   /** the Paperclip board URL, for the open-on-board link (null when unset) */
@@ -35,6 +36,7 @@ export function ConductorChat({
   /** Rendered inside another framed panel (the /chats hub): drop the own
       border + rounding so the shell doesn't double-frame it. */
   bare?: boolean;
+  onVoiceActivity?: (activity: VoiceActivity) => void;
 }) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [sending, setSending] = useState(false); // POST in flight (a second or two)
@@ -202,6 +204,7 @@ export function ConductorChat({
           model={model}
           lastReply={lastReply}
           onError={setError}
+          onVoiceActivity={onVoiceActivity}
         />
       </div>
       {error && <p className="mt-1.5 shrink-0 font-mono text-[10px] text-os-err">⚠ {error}</p>}

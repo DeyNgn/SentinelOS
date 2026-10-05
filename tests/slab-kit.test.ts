@@ -138,7 +138,7 @@ describe('slab css', () => {
   test('the slab is one shared class, not a Home-only one', () => {
     expect(css).toMatch(/\.os-slab \{/);
     expect(css).not.toContain('.home-slab');
-    expect(read('app/page.tsx')).toContain('os-slab');
+    expect(read('components/OverviewDashboard.tsx')).toContain('os-slab');
   });
   test('the drift and fade the insight card and charts use are global keyframes', () => {
     expect(css).toMatch(/@keyframes os-drift/);
@@ -221,7 +221,7 @@ describe('seen live on the mini (2026-09-24)', () => {
     expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\) \{\s*\.vol-fill \{\s*animation: none !important;/);
   });
   test("Home's volume card keeps its own height when the Needs you list runs long", () => {
-    const page = read('app/page.tsx');
+    const page = read('components/OverviewDashboard.tsx');
     const card = page.slice(page.indexOf('title="Operating volume"'), page.indexOf('title="Operating volume"') + 120);
     expect(card).toContain('self-start');
     expect(card).not.toContain('self-stretch');

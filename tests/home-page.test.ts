@@ -13,7 +13,7 @@ const read = (p: string) => readFileSync(join(process.cwd(), p), 'utf8');
  * sentences.
  */
 describe('home console does not repeat itself', () => {
-  const page = read('app/page.tsx');
+  const page = read('components/OverviewDashboard.tsx');
 
   test('collapses runs before rendering them', () => {
     expect(page).toContain("from '@/lib/agents/run-digest'");
