@@ -8,7 +8,7 @@ describe('screenTitleFor', () => {
     expect(screenTitleFor('/funnel')).toBe('Funnel');
     expect(screenTitleFor('/funnel?venture=vantage&stage=nurtured')).toBe('Funnel');
     expect(screenTitleFor('/')).toBe('Home');
-    expect(screenTitleFor('/brain')).toBe('G-Brain');
+    expect(screenTitleFor('/brain')).toBe('Synapse');
   });
 
   test('unknown paths fall back to the raw path', () => {

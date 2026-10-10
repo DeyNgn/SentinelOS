@@ -12,7 +12,7 @@ const read = (p: string) => readFileSync(join(process.cwd(), p), 'utf8');
  * their own motion and are not listed here. The graph on /brain is untouched; only its chrome rises.
  */
 const PAGES: Array<[string, number]> = [
-  ['app/page.tsx', 3],
+  ['components/OverviewDashboard.tsx', 3],
   ['app/agents/page.tsx', 1],
   ['app/analytics/page.tsx', 3],
   ['app/brain/page.tsx', 1],

@@ -55,8 +55,8 @@ describe('filterPalette', () => {
     expect(hits.every((c) => c.kind === 'run')).toBe(true);
   });
 
-  test('nav aliases match: "gbrain" finds the /brain view', () => {
-    const hits = filterPalette(cmds, 'gbrain', 'go');
+  test('nav aliases match: "synapse" finds the /brain view', () => {
+    const hits = filterPalette(cmds, 'synapse', 'go');
     expect(hits.map((c) => c.href)).toContain('/brain');
   });
 

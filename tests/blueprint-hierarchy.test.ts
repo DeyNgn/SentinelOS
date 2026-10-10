@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BlueprintGraph } from '@/lib/blueprint/graph';
 import { APP_ID, buildHierarchy, describeScope, expandedAtLevel, indexHierarchy, relationsOf, ROUTER_DEPARTMENTS, searchHierarchy } from '@/lib/blueprint/hierarchy';
-import { focusEdges, layoutHierarchy, Router, spineEdges, type Box } from '@/lib/blueprint/hierarchy-layout';
+import { focusEdges, layoutHierarchy, resetCam, Router, spineEdges, wheelCam, type Box } from '@/lib/blueprint/hierarchy-layout';
 
 function graph(): BlueprintGraph {
   const nodes: BlueprintGraph['nodes'] = [
@@ -127,6 +127,18 @@ describe('blueprint hierarchy — the graph as buckets', () => {
     }
   });
 
+  it('reset camera returns to the normal 100% scale', () => {
+    const layout = layoutHierarchy(h, expandedAtLevel(idx, 1));
+    expect(resetCam(layout, 1200).s).toBe(1);
+  });
+
+  it('vertical wheel zooms at the pointer while horizontal and Shift scroll pan', () => {
+    const cam = { x: 10, y: 20, s: 1 };
+    expect(wheelCam(cam, 0, -80, 100, 100).s).toBeGreaterThan(1);
+    expect(wheelCam(cam, 20, 0, 100, 100)).toEqual({ x: -10, y: 20, s: 1 });
+    expect(wheelCam(cam, 0, 20, 100, 100, true)).toEqual({ x: 10, y: 0, s: 1 });
+  });
+
   it('routing never runs a trace through a card', () => {
     const layout = layoutHierarchy(h, expandedAtLevel(idx, 3));
     const router = new Router(layout, idx);
@@ -176,7 +188,7 @@ describe('blueprint hierarchy — the graph as buckets', () => {
   it('search finds by name and by subline and reports the path', () => {
     const hits = searchHierarchy(idx, 'attio');
     expect(hits.map((x) => x.id)).toEqual(expect.arrayContaining(['agent-crm', 'connector-attio']));
-    expect(hits.find((x) => x.id === 'connector-attio')?.path).toBe('Founder OS › Connectors');
+    expect(hits.find((x) => x.id === 'connector-attio')?.path).toBe('Section OS › Connectors');
     expect(searchHierarchy(idx, 'closer')[0]?.id).toBe('agent-atlas');
     expect(searchHierarchy(idx, 'zzz')).toHaveLength(0);
   });
@@ -184,7 +196,7 @@ describe('blueprint hierarchy — the graph as buckets', () => {
   it('the ask scope describes the selection, its members and its relations, never invents', () => {
     const scope = describeScope(h, idx, 'dept-sales') as { scope: string; path: string; inside?: unknown[]; relations?: string[] };
     expect(scope.scope).toBe('Sales');
-    expect(scope.path).toBe('Founder OS › Sales');
+    expect(scope.path).toBe('Section OS › Sales');
     expect(scope.inside).toHaveLength(3);
     expect(scope.relations?.some((r) => r.includes('Attio'))).toBe(true);
     const whole = describeScope(h, idx, null) as { scope: string; containers: unknown[] };

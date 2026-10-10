@@ -20,7 +20,7 @@ function isTyping(): boolean {
  * ⌘K — one box for jump / run / ask. Groups: Go to, Run, Ask. Tab cycles scope,
  * ↑↓ move, ↵ fires, Esc closes. Digit keys 1–9 jump views while the palette is
  * closed. No match + ↵ sends the text straight to the Conductor. Mounted once
- * in app/layout.tsx; the Topbar button opens it via the 'alex:palette' event.
+ * in app/layout.tsx; the Topbar button opens it via the 'dey:palette' event.
  */
 export function CommandPalette({ agents }: { agents: PaletteAgent[] }) {
   const [open, setOpen] = useState(false);
@@ -47,10 +47,10 @@ export function CommandPalette({ agents }: { agents: PaletteAgent[] }) {
     };
     const onOpen = () => setOpen(true);
     window.addEventListener('keydown', onKeydown);
-    window.addEventListener('alex:palette', onOpen);
+    window.addEventListener('dey:palette', onOpen);
     return () => {
       window.removeEventListener('keydown', onKeydown);
-      window.removeEventListener('alex:palette', onOpen);
+      window.removeEventListener('dey:palette', onOpen);
     };
   }, [open, router]);
 
@@ -71,7 +71,7 @@ export function CommandPalette({ agents }: { agents: PaletteAgent[] }) {
   };
 
   const ask = async (message: string, label: string) => {
-    const id = toast.busy(`Asking the Conductor · "${label}"`);
+    const id = toast.busy(`Asking Operator · "${label}"`);
     try {
       const res = await fetch('/api/conductor/chat', {
         method: 'POST',
@@ -79,9 +79,9 @@ export function CommandPalette({ agents }: { agents: PaletteAgent[] }) {
         body: JSON.stringify({ message }),
       });
       if (!res.ok) throw new Error(String(res.status));
-      toast.update(id, 'ok', `Sent to the Conductor · "${label}"`);
+      toast.update(id, 'ok', `Sent to Operator · "${label}"`);
     } catch {
-      toast.update(id, 'err', 'Conductor unreachable');
+      toast.update(id, 'err', 'Operator unreachable');
     }
   };
 
@@ -213,7 +213,7 @@ export function CommandPalette({ agents }: { agents: PaletteAgent[] }) {
             <div className="animate-enter p-7 text-center font-mono text-[10.5px] leading-relaxed text-os-dim">
               <span className="text-os-text">No match for «{q}».</span>
               <br />
-              <span className="text-[9.5px]">press ↵ to ask the Conductor instead</span>
+              <span className="text-[9.5px]">press ↵ to ask Operator instead</span>
             </div>
           )}
         </div>
@@ -230,7 +230,7 @@ export function CommandPalette({ agents }: { agents: PaletteAgent[] }) {
           </span>
           <span className="ml-auto inline-flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 animate-blink bg-os-ok" />
-            Conductor listening
+            Operator listening
           </span>
         </div>
       </div>

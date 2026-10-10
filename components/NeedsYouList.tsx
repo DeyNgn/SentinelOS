@@ -327,7 +327,7 @@ export function NeedsYouList({
       <div className="flex items-center gap-2 px-4 pt-2">
         <span className="h-px flex-1 bg-os-border" />
         <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-os-dim">
-          ranked by the Conductor · people first, then deadlines
+          ranked by the Operator · people first, then deadlines
         </span>
         <span className="h-px flex-1 bg-os-border" />
       </div>
@@ -337,7 +337,7 @@ export function NeedsYouList({
           <span className="text-[18px] text-os-ok">✓</span>
           <p className="text-[12.5px] font-semibold text-os-text">Nothing needs you.</p>
           <p className="font-mono text-[10px] text-os-dim">
-            the Conductor will surface the next thing here
+            the Operator will surface the next thing here
             {held > 0 && ` · ${held} snoozed`}
             {decided.length > 0 && ` · you handled ${decided.length}`}
           </p>

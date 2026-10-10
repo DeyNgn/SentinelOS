@@ -121,7 +121,7 @@ export function BrainSatellites() {
       <div className="rise pointer-events-none absolute right-[124px] top-3 z-20 flex items-center gap-1.5" style={risePos(1)}>
         <span className={CHIP} title={data?.statusLine ?? 'reading the store'}>
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: mounted ? 'var(--accent)' : 'var(--warn)' }} />
-          G-Brain
+          Synapse
           <span className="text-os-dim">{data ? (mounted ? 'connected' : 'not mounted') : 'reading'}</span>
         </span>
         {data && mounted && (
@@ -148,16 +148,16 @@ export function BrainSatellites() {
             boxShadow: phase === 'retrieve' ? '0 0 32px color-mix(in oklab, var(--accent) 14%, transparent)' : '0 8px 30px rgba(0,0,0,0.35)',
           }}
         >
-          <span className="shrink-0 font-mono text-[10.5px] text-os-accent">g-brain ›</span>
+          <span className="shrink-0 font-mono text-[10.5px] text-os-accent">synapse ›</span>
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             disabled={data !== null && !mounted}
-            placeholder={mounted || !data ? 'ask the brain' : 'brain-store not mounted'}
+            placeholder={mounted || !data ? 'ask Synapse' : 'brain-store not mounted'}
             spellCheck={false}
             className="min-h-[16px] w-full flex-1 border-0 bg-transparent font-mono text-[10.5px] text-os-text outline-none placeholder:text-os-dim"
             style={{ caretColor: 'var(--accent)' }}
-            aria-label="Ask the brain"
+            aria-label="Ask Synapse"
           />
           <span className="shrink-0 font-mono text-[9.5px] text-os-dim">{statusWord}</span>
         </div>

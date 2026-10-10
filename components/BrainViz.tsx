@@ -34,7 +34,7 @@ export function BrainViz({
   }
 
   return (
-    <svg viewBox="0 0 520 520" role="img" aria-label="G-Brain knowledge core">
+    <svg viewBox="0 0 520 520" role="img" aria-label="Synapse knowledge core">
       <defs>
         <radialGradient id="coreGrad">
           <stop offset="0%" stopColor="var(--brain-1)" stopOpacity="0.22" />

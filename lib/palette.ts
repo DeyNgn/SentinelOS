@@ -1,4 +1,4 @@
-import { NAV_OPERATE, NAV_AGENTS, NAV_INTELLIGENCE, NAV_SYSTEM, NAV_LIBRARY } from '@/lib/nav';
+import { NAV_SHOPS } from '@/lib/nav';
 
 export type PaletteKind = 'go' | 'run' | 'ask';
 export type PaletteScope = 'all' | PaletteKind;
@@ -39,7 +39,7 @@ const NAV_ALIASES: Record<string, string[]> = {
   '/tasks': ['todo', 'board', 'kanban'],
   '/skills': ['sops', 'playbooks'],
   '/org': ['hierarchy', 'chart', 'structure', 'pillars'],
-  '/brain': ['gbrain', 'knowledge', 'memory', 'graph', 'recall'],
+  '/brain': ['synapse', 'knowledge', 'memory', 'graph', 'recall'],
   '/doctor': ['health', 'diagnostics', 'checks'],
   '/integrations': ['connections', 'tools', 'creds', 'status'],
   '/usage': ['tokens', 'burn', 'quota', 'seats'],
@@ -48,14 +48,6 @@ const NAV_ALIASES: Record<string, string[]> = {
   '/reference': ['brm', 'domains', 'model'],
   '/personas': ['templates', 'variants'],
 };
-
-const NAV_GROUPS: [string, { href: string; label: string }[]][] = [
-  ['Operate', NAV_OPERATE],
-  ['Agents', NAV_AGENTS],
-  ['Intelligence', NAV_INTELLIGENCE],
-  ['System', NAV_SYSTEM],
-  ['Library', NAV_LIBRARY],
-];
 
 // Off-OS jumps that used to live in the flat command list. Entries for
 // retired connectors don't carry over.
@@ -85,21 +77,21 @@ const ASK: PaletteCommand[] = [
   },
   {
     id: 'ask-brain', kind: 'ask', glyph: '◎',
-    title: 'Search G-Brain', sub: 'open the knowledge core query card',
-    href: '/brain', aliases: ['gbrain', 'knowledge', 'query', 'recall'],
+    title: 'Search Synapse', sub: 'open the knowledge core query card',
+    href: '/brain', aliases: ['synapse', 'knowledge', 'query', 'recall'],
   },
 ];
 
 /** One box, three groups: Go to (nav + external), Run (agent roster), Ask
-    (Conductor prompts + G-Brain). Pure and serializable-in, so the layout can
+    (Conductor prompts + Synapse). Pure and serializable-in, so the layout can
     feed it DB rows and the client palette can build the list itself. */
 export function buildPaletteCommands(agents: PaletteAgent[]): PaletteCommand[] {
-  const go: PaletteCommand[] = NAV_GROUPS.flatMap(([group, items]) =>
-    items.map(({ href, label }) => ({
+  const go: PaletteCommand[] = NAV_SHOPS.flatMap((shop) =>
+    shop.items.map(({ href, label }) => ({
       id: `go-${href}`,
       kind: 'go' as const,
       title: label,
-      sub: group,
+      sub: shop.label,
       glyph: '›',
       href,
       aliases: NAV_ALIASES[href],

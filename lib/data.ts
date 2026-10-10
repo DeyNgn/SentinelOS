@@ -1,6 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import { openDb, type FounderDb } from '@/lib/db';
+import { loadOperationManifests, type OperationManifest } from '@/lib/operations';
 import { SEED_VERSION, seedDatabase, syncSeededProposals } from '@/lib/seed';
 import { resolveDbPath } from '@/lib/paths';
 
@@ -56,4 +57,8 @@ export function getDb(): FounderDb {
   // for why that is safe.
   syncSeededProposals(instance);
   return instance;
+}
+
+export function getOperations(): OperationManifest[] {
+  return loadOperationManifests().filter((op) => op.active);
 }

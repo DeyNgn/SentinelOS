@@ -34,7 +34,7 @@ describe('overlayLiveOrg', () => {
       live('Forge', 'running'),
       live('Hermes Workers', 'idle'),
     ]);
-    expect(o.conductor?.status).toBe('running');
+    expect(o.operator?.status).toBe('running');
     expect(o.byDepartment['dept-sales']?.model).toBe('claude-sonnet-4-6');
     expect(o.byDepartment['dept-tech']?.status).toBe('error');
     expect(o.byDepartment['dept-clients']).toBeUndefined();
@@ -43,7 +43,7 @@ describe('overlayLiveOrg', () => {
 
   test('empty live list (board down) yields an inert overlay', () => {
     const o = overlayLiveOrg(DEPTS, []);
-    expect(o.conductor).toBeNull();
+    expect(o.operator).toBeNull();
     expect(o.byDepartment).toEqual({});
     expect(o.extras).toEqual([]);
   });

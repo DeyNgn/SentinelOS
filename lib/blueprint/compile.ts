@@ -3,7 +3,7 @@ import { realAgents } from '@/lib/agents/real';
 import { allConnectorStatuses } from '@/lib/connectors';
 import { llmStatus, modelChain } from '@/lib/connectors/llm';
 import type { ConnectorStatus } from '@/lib/connectors/types';
-import { NAV_OPERATE, NAV_AGENTS, NAV_INTELLIGENCE, NAV_SYSTEM, NAV_LIBRARY, type NavItem } from '@/lib/nav';
+import { NAV_SHOPS, type NavItem } from '@/lib/nav';
 import {
   BlueprintGraphSchema,
   validateGraph,
@@ -98,7 +98,7 @@ function daemons(): BlueprintNode[] {
       name: 'Telegram bridge',
       layer: 4,
       status: has('TELEGRAM_BOT_TOKEN') ? 'configured' : 'not-configured',
-      blurb: has('TELEGRAM_BOT_TOKEN') ? 'The front door from a phone: a message becomes a comment on the cockpit issue and wakes the Conductor.' : 'TELEGRAM_BOT_TOKEN is unset on this host.',
+      blurb: has('TELEGRAM_BOT_TOKEN') ? 'The front door from a phone: a message becomes a comment on the cockpit issue and wakes the Operator.' : 'TELEGRAM_BOT_TOKEN is unset on this host.',
       facts: {},
       icon: 'message-circle',
     },
@@ -185,7 +185,7 @@ const SURFACE_STORE_EDGES: Record<string, string[]> = {
   '/adpilot': ['store-ad-intel'],
 };
 
-const ALL_NAV: NavItem[] = [...NAV_OPERATE, ...NAV_AGENTS, ...NAV_INTELLIGENCE, ...NAV_SYSTEM, ...NAV_LIBRARY];
+const ALL_NAV: NavItem[] = NAV_SHOPS.flatMap((shop) => shop.items);
 
 function surfaceSlug(href: string): string {
   return href === '/' ? 'home' : href.replace(/^\//, '').replace(/\//g, '-');
@@ -231,15 +231,15 @@ export async function compileBlueprint(db: FounderDb, opts: CompileOptions = {})
 
   // L0 + L1: the spine.
   nodes.push({ id: 'operator', kind: 'operator', name: OPERATOR_NAME, layer: 0, status: 'live', blurb: 'The operator. Everything answers upward to here.', facts: {}, icon: 'user-round' });
-  const conductor = agents.find((a) => a.id === 'conductor');
+  const operatorAgent = agents.find((a) => a.id === 'conductor');
   nodes.push({
     id: 'agent-conductor',
     kind: 'wizard',
-    name: 'Conductor',
+    name: 'Operator',
     layer: 1,
     status: 'live',
-    blurb: conductor?.description.slice(0, 140) ?? 'The super agent: talks to everything, routes to everyone.',
-    facts: conductor ? { role: conductor.role, model: conductor.model } : {},
+    blurb: operatorAgent?.description.slice(0, 140) ?? 'The operations lead: coordinates the agent system and routes work.',
+    facts: operatorAgent ? { role: operatorAgent.role, model: operatorAgent.model } : {},
     icon: 'wand-2',
   });
   edges.push({ from: 'operator', to: 'agent-conductor', kind: 'commands' });
@@ -287,7 +287,7 @@ export async function compileBlueprint(db: FounderDb, opts: CompileOptions = {})
     if (dept) edges.push({ from: `person-${p.id}`, to: `dept-${dept.slug}`, kind: 'member-of' });
   }
 
-  // The engine the Conductor and every chat actually run on: the AI Gateway.
+  // The engine the Operator and every chat actually run on: the AI Gateway.
   const llm = opts.llm ?? (await llmStatus());
   const engineUp = llm.state === 'connected';
   nodes.push({

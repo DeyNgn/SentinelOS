@@ -17,19 +17,19 @@ const read = (p: string) => readFileSync(join(process.cwd(), p), 'utf8');
  * the load-bearing bits — lock them here.
  */
 describe('cohort invite constants', () => {
-  it('points at founderos.example.com over https', () => {
-    expect(COHORT_URL).toBe('https://founderos.example.com');
+  it('points at the Dey Engineering home page over https', () => {
+    expect(COHORT_URL).toBe('https://deyengineering.com/home');
   });
 
-  it('carries the exact footer CTA line', () => {
+  it('carries the local operations CTA line', () => {
     expect(COHORT_CTA).toBe(
-      'Want help setting this up? Go to the FounderOS cohort to learn how to build the entire thing end-to-end and get it into production.',
+      'Local SectionOS operations console. Keep this shell aligned with the active operator and mission.',
     );
   });
 
   it('namespaces its storage key so it never collides with the theme key', () => {
-    expect(COHORT_STORAGE_KEY).toMatch(/^founderos-/);
-    expect(COHORT_STORAGE_KEY).not.toBe('alex-theme');
+    expect(COHORT_STORAGE_KEY).toMatch(/^dey/);
+    expect(COHORT_STORAGE_KEY).not.toBe('dey-theme');
   });
 });
 

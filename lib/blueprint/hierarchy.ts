@@ -12,7 +12,7 @@ import type { BlueprintGraph, BlueprintNode, BlueprintEdge } from './graph';
 
 export type HKind =
   | 'operator'
-  | 'command' // the engine the Conductor runs on
+  | 'command' // the engine the Operator runs on
   | 'app' // the running OS
   | 'router'
   | 'agent'
@@ -260,8 +260,8 @@ export function buildHierarchy(graph: BlueprintGraph): Hierarchy {
       type: 'container',
       id: APP_ID,
       kind: 'app',
-      name: 'Founder OS',
-      sub: 'the running OS · the Conductor commands agents · agents belong to departments · agents use tools',
+      name: 'Section OS',
+      sub: 'the running Section OS · the Operator commands agents · agents belong to departments · agents use tools',
       icon: 'layout-dashboard',
       rows: appRows,
       facts: { agents: String(agents.length), departments: String(departments.length), pages: String(surfaces.length) },

@@ -1,29 +1,38 @@
 import { describe, expect, test } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { NAV_OPERATE, NAV_AGENTS, NAV_INTELLIGENCE, NAV_SYSTEM, NAV_LIBRARY, NAV_ORDER, DIGIT_VIEWS } from '@/lib/nav';
+import { NAV_SHOPS, NAV_ORDER, DIGIT_VIEWS, navBreadcrumbs } from '@/lib/nav';
 
 describe('shared nav config', () => {
-  test('NAV_ORDER is the visible order: Operate → Agents → Intelligence → System → Variants', () => {
-    expect(NAV_ORDER).toEqual(
-      [...NAV_OPERATE, ...NAV_AGENTS, ...NAV_INTELLIGENCE, ...NAV_SYSTEM, ...NAV_LIBRARY].map((n) => n.href),
-    );
+  test('every route appears once in the visible S-Shop hierarchy', () => {
+    const hrefs = NAV_SHOPS.flatMap((shop) => shop.items.map((item) => item.href));
+    expect(NAV_ORDER).toEqual(hrefs);
+    expect(new Set(hrefs).size).toBe(hrefs.length);
   });
 
-  test('Agents group holds the roster and the org chart', () => {
-    expect(NAV_AGENTS.map((n) => n.href)).toEqual(['/agents', '/chats', '/tasks', '/skills', '/org', '/blueprint']);
+  test('S6 communication and S7 influence routes do not overlap', () => {
+    const s6 = NAV_SHOPS.find((shop) => shop.id === 's6')!;
+    const s7 = NAV_SHOPS.find((shop) => shop.id === 's7')!;
+    expect(s6.items.map((item) => item.href)).toEqual(['/comms', '/chats']);
+    expect(s7.items.map((item) => item.href)).toEqual(['/social', '/content', '/brand-deals']);
   });
 
-  test('Intelligence group holds G-Brain and Doctor', () => {
-    expect(NAV_INTELLIGENCE.map((n) => n.href)).toEqual(['/brain', '/doctor']);
+  test('S9 has no duplicate entries from Logistics or Intelligence', () => {
+    const s9 = NAV_SHOPS.find((shop) => shop.id === 's9')!;
+    expect(s9.items.map((item) => item.href)).toEqual(['/personas']);
   });
 
-  test('Finances lives in Operate; Agents, Org Chart, and G-Brain moved to their own groups', () => {
-    const hrefs = NAV_OPERATE.map((n) => n.href);
-    expect(hrefs).toContain('/finances');
-    expect(hrefs).not.toContain('/agents');
-    expect(hrefs).not.toContain('/org');
-    expect(hrefs).not.toContain('/brain');
+  test('Overview is the S3 dashboard and Operator stays outside the shops', () => {
+    const s3 = NAV_SHOPS.find((shop) => shop.id === 's3')!;
+    expect(s3.items[0]).toMatchObject({ href: '/overview', label: 'Overview' });
+    expect(NAV_ORDER).not.toContain('/');
+    expect(navBreadcrumbs('/')).toEqual(['Operator']);
+  });
+
+  test('each sidebar breadcrumb uses the owning shop, item label, and nested route', () => {
+    expect(navBreadcrumbs('/comms')).toEqual(['S6 Communications', 'Comms']);
+    expect(navBreadcrumbs('/agents/commander')).toEqual(['S1 Personnel', 'Agents', 'Commander']);
+    expect(navBreadcrumbs('/')).toEqual(['Operator']);
   });
 
   test('digit shortcuts (1–9) map to the first 9 views in visible order', () => {
@@ -38,17 +47,10 @@ describe('shared nav config', () => {
     }
   });
 
-  test('regression: Social, Content, Finances stay digit-reachable', () => {
+  test('all shop routes remain in the shared nav order', () => {
     for (const href of ['/social', '/content', '/finances']) {
-      expect(DIGIT_VIEWS, `${href} must be reachable by digit`).toContain(href);
+      expect(NAV_ORDER, `${href} must be in the visible navigation`).toContain(href);
     }
-  });
-
-  test('Funnel sits right after Comms and ahead of Social (the operator, 2026-07-02)', () => {
-    const hrefs = NAV_OPERATE.map((n) => n.href);
-    expect(hrefs.indexOf('/funnel')).toBe(hrefs.indexOf('/comms') + 1);
-    // Social stays downstream of Funnel; a concurrent Workflows item may sit between them.
-    expect(hrefs.indexOf('/funnel')).toBeLessThan(hrefs.indexOf('/social'));
   });
 
   test('CommandPalette consumes the shared DIGIT_VIEWS (no private stale copy)', () => {

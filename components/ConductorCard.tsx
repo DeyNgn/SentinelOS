@@ -6,7 +6,7 @@ import { AsyncButton } from '@/components/AsyncButton';
 import { ConductorEmblem } from '@/components/ConductorEmblem';
 
 /**
- * The "AI Head" card from the FounderOS board: the Conductor super-agent
+ * The "AI Head" card from the Section OS board: the Conductor super-agent
  * with its chat pill. Sending broadcasts the message to every agent in
  * parallel via POST /api/agents/broadcast; replies expand below.
  */
@@ -52,11 +52,11 @@ export function ConductorCard({
     <div data-lens="r" className="pressable is-row group w-[340px] rounded-tile border border-os-border-bright bg-os-surface p-4">
       <div className="text-center text-[10px] uppercase tracking-[0.25em] text-os-dim">AI Head</div>
 
-      {/* Living core — breathes and orbits while the Conductor is broadcasting */}
+      {/* Living core — breathes and orbits while Operator is broadcasting */}
       <div className="mt-2 flex justify-center">
         <ConductorEmblem size={62} thinking={sending} />
       </div>
-      <div className="mt-2 text-center text-sm font-bold tracking-[0.2em]">CONDUCTOR</div>
+      <div className="mt-2 text-center text-sm font-bold tracking-[0.2em]">OPERATOR</div>
       <div className="text-center text-[10px] text-os-dim">
         super agent · {conductor.instance} runtime until the dedicated host lands
       </div>
@@ -67,7 +67,7 @@ export function ConductorCard({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && send()}
-          placeholder="Chat with Conductor — reaches every agent"
+          placeholder="Chat with Operator — reaches every agent"
           className="min-w-0 flex-1 rounded-full border border-os-border bg-os-bg px-3 py-1.5 text-xs text-os-text placeholder:text-os-dim focus:border-os-border-bright focus:outline-none"
           disabled={sending}
         />

@@ -1,238 +1,184 @@
-# Founder OS
+# Sentinel OS
 
-**A personal operating system for a one-person business: a live web command
-center that runs your company as a set of AI-assisted "departments."**
+**A proprietary Agentic Command Harness and Enclave Operating System by Dey Engineering.**
 
-Founder OS turns the tabs, tools, and mental overhead of running a solo business
-into one screen: unified comms, a client funnel, social growth, finances, a
-knowledge graph, and a roster of named AI agents that each own a real job.
+Sentinel OS consolidates multi-agent orchestration, mission planning, communications, and defense-grade enclave operations into a unified command deck. Modeled on military staff section principles (S1–S9) and powered by local-first agent swarms, Sentinel OS runs an entire enterprise as an integrated, deterministic software harness.
 
-This repository is the **open-source demo build**. It ships seeded with
-realistic placeholder data, so every page is alive out of the box with no
-accounts, no API keys, and nothing to configure. It's the same system taught,
-live, in the [Founder OS cohort](https://www.founderos.example.com); this repo lets
-you explore and run it yourself.
+This repository contains the **private, proprietary production codebase** engineered for local execution inside WSL2 with GPU acceleration (Ollama / Hermes) or isolated deployment within secure AWS GovCloud / FedRAMP enclaves.
 
-> Want to build your own, live, with guidance? That's what the cohort is for.
-> [founderos.example.com](https://www.founderos.example.com)
+## Command Hierarchy & Operational Framework
 
----
+Sentinel OS structures autonomous execution using a disciplined four-tier command hierarchy:
 
-## Quick start
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          OPERATOR (Human Commander)                         │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+┌──────────────────────────────────────▼──────────────────────────────────────┐
+│                        CONDUCTOR (Master Orchestrator)                      │
+│                  Task Routing, Agent Dispatch, System Bus                   │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+┌──────────────────────────────────────▼──────────────────────────────────────┐
+│             STAFF SECTIONS & OPERATIONAL PILLARS (S1 - S9)                  │
+│                                                                             │
+│  S1 Personnel │ S2 Intel │ S3 Ops │ S4 Logistics │ S5 Plans │ S6 Comms ...  │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+┌──────────────────────────────────────▼──────────────────────────────────────┐
+│                       WORKERS & AGENT EXECUTIONS                            │
+│           Deterministic Tools, Model Context Protocol (MCP), LLMs           │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
-Requires **Node 22**.
+1. **Operator:** The human commander with final decision authority.
+2. **Conductor:** The central routing daemon that decomposes operator intent, schedules workflows, and assigns tasks across sections.
+3. **Pillars (S-Shops):** Permanent functional divisions (S1 Personnel, S2 Intelligence, S3 Operations, S4 Logistics, S5 Plans, S6 Signal & Comms, S7 Influence, S8 Financials, S9 Civil Affairs).
+4. **Workers:** Named autonomous agents, schedulers, and Model Context Protocol (MCP) servers with typed `run()` interfaces and deterministic verification boundaries.
+
+## Operational Route Matrix
+
+| Route | Staff Section | Function & Capability |
+| :--- | :--- | :--- |
+| `/` | **Command** | Operator Console: pulse row, connector status strip, active agent roster, system health. |
+| `/comms` | **S6 Comms** | Unified communications feed: email, messaging, dispatch channels, and dictation streams. |
+| `/chats` | **S6 Comms** | Agent interaction hub: direct operator-to-agent console with Conductor routing. |
+| `/funnel` | **S7 Influence** | Mission & client acquisition pipeline: neural journey graph and radial status wheel. |
+| `/social` | **S7 Influence** | Audience reach and distribution: per-channel engagement, sentiment, and scheduling. |
+| `/content` | **S7 Influence** | Operational briefing and content dispatch calendar. |
+| `/brand-deals` | **S7 Influence** | Partnership and contract pipeline: deal volume meters, stages, and detail drawer. |
+| `/adpilot` | **S7 Influence** | Paid-reach campaign manager and strategic messaging blueprint. |
+| `/tasks` | **S3 Ops** | Unified mission Kanban board fed directly by agent outputs and operator directives. |
+| `/skills` | **S3 Ops** | Reusable, schedulable agent execution skills and tool routines. |
+| `/workflows` | **S3 Ops** | Multi-step agent pipelines with dependency trees and conditional execution. |
+| `/brain` | **S2 Intel** | Knowledge core: interactive graph visualization, semantic index, and document vault. |
+| `/doctor` | **S2 Intel** | System diagnostics: health verification for knowledge bases, local models, and connectors. |
+| `/finances` | **S8 Financials** | Balance ledger: income, capital allocations, burn rate, and expense categorizations. |
+| `/trading` | **S8 Financials** | Asset monitor: portfolio tracking, quantitative reasoning, open orders, and guardrails. |
+| `/usage` | **S8 Financials** | Compute & token ledger: VRAM consumption, GPU run hours, and model seat costs. |
+| `/agents` | **S1 Personnel** | Agent Roster: active agent states, model bindings, permissions, and run logs. |
+| `/org` | **S1 Personnel** | Organizational hierarchy: visual command tree mapping Operator, Conductor, and Workers. |
+| `/personas` | **S1 Personnel** | Persona templates configuring agent behavioral profiles and execution postures. |
+| `/integrations` | **S4 Logistics** | Connector command deck: honest-status telemetry for local and remote integration buses. |
+| `/analytics` | **S4 Logistics** | System telemetry: historical performance metrics, request throughput, and latency. |
+| `/roadmap` | **S5 Plans** | Strategic roadmaps: multi-phase execution goals and milestone timelines. |
+| `/blueprint` | **S5 Plans** | Architecture blueprints and operational standard operating procedures (SOPs). |
+
+## Knowledge & Memory Architecture
+
+Sentinel OS deploys a dual-tier knowledge framework to guarantee deterministic recall and prevent agent hallucination.
+
+```
+       RAW SOURCES (Markdown, APIs, Signals)
+                        │
+                        ▼
+┌───────────────────────────────────────────────┐
+│        SYNAPSE (Knowledge Repository)         │
+│   • Markdown-first Source of Truth            │
+│   • Hybrid Retrieval (Vector + Keyword RRF)   │
+│   • Local Grep Fallback (Zero-Downtime)       │
+└───────────────────────┬───────────────────────┘
+                        │
+                        ▼
+┌───────────────────────────────────────────────┐
+│   OPTIMAL ENGINE (Governed Memory Runtime)    │
+│                                               │
+│    Source ──► Signal ──► Claim ──► Fact ──►   │
+│                                   Memory      │
+│   • Promotion-gated validation pipeline       │
+│   • Tenant / Org / Workspace / Node topology  │
+└───────────────────────────────────────────────┘
+```
+
+### 1. Synapse (The Knowledge Base)
+
+Plain **Markdown files are the source of truth**. They are chunked and embedded into a vector store, enabling hybrid retrieval through **Reciprocal-Rank Fusion (RRF)** combining keyword and semantic embeddings. If the vector backend is unreachable, retrieval falls back to high-speed local grep over the raw markdown files: fewer smarts, zero downtime.
+
+### 2. Optimal Engine (The Governed Memory Runtime)
+
+Where Synapse stores documents, **Optimal Engine governs what the OS actually accepts as truth**. It serves as the system of record for memory, organized as a **Tenant, Organization, Workspace, Node** topology, with a disciplined truth lifecycle:
+
+$$
+\text{Source} \longrightarrow \text{Signal} \longrightarrow \text{Claim} \overset{\text{Review}}{\longrightarrow} \text{Fact} \longrightarrow \text{Memory}
+$$
+
+Raw sources produce signals; signals become claims; claims are reviewed and promoted into verified facts; facts distill into durable memories that agents draw on. Agents may write sources, signals, and pending claims, but **facts are promotion-gated**: nothing becomes permanent memory without passing verification or operator review.
+
+Together: **Synapse is the library; Optimal Engine is the librarian and the system of record.** Agents query both before executing tasks.
+
+## System Architecture: Deterministic & Enclave Ready
+
+Sentinel OS separates UI visualization, business logic, and AI execution into clean, auditable tiers:
+
+* **Repository Layer (`lib/data.ts`, `lib/db.ts`):** Single-instance SQLite database operating in Write-Ahead Logging (WAL) mode. Every route reads through typed data access objects; raw SQL queries never bleed into interface components.
+* **Schema Enforcement (`lib/schemas.ts`):** Strict Zod validation schemas guard all database inputs and outputs, ensuring data integrity across process boundaries.
+* **Honest Connectors (`lib/connectors/*`):** Integration drivers report accurate, real-time connectivity (`connected`, `not_configured`, or `error`) with no spoofed statuses.
+* **Runtime Agent Dispatcher (`lib/agents/*`):** Every registered agent implements a typed execution harness with persistent execution logs and structured tool interfaces.
+
+## Local AI Inference Setup (Hermes 3 / Ollama)
+
+Sentinel OS defaults to local GPU inference via **Ollama** running inside WSL2, keeping all prompt processing and intelligence retrieval strictly within your machine.
+
+### 1. Pull the Model
 
 ```bash
+ollama pull hermes3:3b
+```
+
+### 2. Configure Ollama for 64k Context
+
+Edit the systemd service configuration:
+
+```bash
+sudo systemctl edit ollama
+```
+
+Add the environment settings:
+
+```ini
+[Service]
+Environment="OLLAMA_CONTEXT_LENGTH=64000"
+Environment="OLLAMA_KEEP_ALIVE=24h"
+```
+
+Reload systemd and restart Ollama:
+
+```bash
+sudo systemctl daemon-reload && sudo systemctl restart ollama
+```
+
+## Quick Start (WSL2 / Local Runtime)
+
+**Prerequisites:** Node.js 22+ and an active Ollama instance.
+
+```bash
+# 1. Install dependencies
 npm install
-cp .env.example .env.local   # optional; only needed to wire live integrations
-npm run dev                  # http://localhost:4100
+
+# 2. Configure local environment variables
+cp .env.example .env.local
+
+# 3. Start development server
+npm run dev    # Access UI at http://localhost:3000 or http://localhost:4100
 ```
 
-A local SQLite database is **seeded with demo data on first run**, so every page
-is populated immediately. No credentials are required to browse. Navigate with
-the sidebar or the Command Palette (Cmd/Ctrl + K). Five themes ship, including
-the Monolith default (white on black, color means status only); pick it from the
-palette icon in the top bar.
+### Build & Maintenance Utilities
 
 ```bash
-npm run build && npm start   # production build
-npm test                     # vitest suite
-npm run typecheck            # tsc --noEmit
-npm run seed                 # re-seed the demo DB (idempotent)
+npm run build && npm start   # Production build and server launch
+npm test                     # Execute Vitest test suite
+npm run typecheck            # Run TypeScript type validation
+npm run seed                 # Re-seed the local SQLite database
 ```
 
----
+## Security & Enclave Isolation
 
-## What you're looking at
+* **Local Sovereignty:** All LLM inference, embedding calculations, and database reads run locally inside WSL2. No Controlled Unclassified Information (CUI) or proprietary assets leave the local boundary.
+* **GovCloud Readiness:** For hosted enclave configurations, external webhooks and egress streams route through the **S9 Civil Affairs Sanitizer**, scrubbing hostnames, internal IPs, and sensitive parameters prior to transmission.
 
-| Route | What it is |
-| --- | --- |
-| `/` | Operator console: pulse row, connections strip, agent list, knowledge core |
-| `/comms` | Unified inbox: email, Slack, WhatsApp, and dictation lanes in one feed |
-| `/funnel` | Living client-journey flow: a left-to-right neural view and a radial acquisition wheel, both fullscreenable |
-| `/social` | Growth dashboard: per-account follower charts, audience share, posting cadence |
-| `/content` | Content pipeline and calendar |
-| `/finances` | Income and expense charts, money-out views, expenses by category |
-| `/agents` | The AI agent roster, each with a real `run()` and last-run state |
-| `/tasks` | Task board fed by the agents |
-| `/skills` | Reusable, schedulable agent skills |
-| `/org` | Org hierarchy: operator, conductor, pillars, workers |
-| `/brain` | The knowledge core and graph (see **Knowledge layer** below) |
-| `/workflows` | Multi-step tool workflows |
-| `/integrations` | Live connections board with honest status for every connector |
-| `/analytics` | Real connector numbers and sparkline history |
-| `/roadmap`, `/reference` | Phases and quarters, and the reference model |
-| `/brand-deals` | Sponsorship pipeline as one slab: hatched funnel, deal volume meters, sortable deals, detail drawer |
-| `/trading` | Brokerage monitor: sleeve value line, agent reasoning, positions, open orders, trade log, guardrail limits with an Autopilot switch |
-| `/chats` | Chat hub: talk to any agent, with the Conductor routing |
-| `/adpilot`, `/blueprint` | Paid-media planner and the system blueprint |
-| `/doctor` | Health checks for the knowledge layer and connectors |
-| `/usage` | Token-burn board across model seats |
-| `/personas` | Persona templates that reskin the OS for other business types |
+## Proprietary Notice
 
-Every screen runs the same interaction layer: a cursor spotlight across the whole viewport, a hover lens on every control, press-sink buttons, async idle → busy → done affordances, sliding tabs, and slab motion (cards rise in, lines draw, numerals count).
+**Confidential & Proprietary.** Copyright © Dey Engineering. All Rights Reserved.
 
----
-
-## Architecture: demo-first, real-ready
-
-This is the load-bearing design rule. The demo looks alive because of rich
-seeded data, but **every page and API route reads through a repository layer**
-(never a raw query), and **every connector returns an honest status** (it never
-fakes "connected"). Swapping seeded tables for live sources is a repo-level
-change, not a rewrite.
-
-- **`lib/data.ts`**: `getDb()` app singleton; seeds on first touch.
-- **`lib/db.ts`**: `openDb()` plus typed repositories (`agents`, `departments`,
-  `social`, `funnel`, `finances`, and more).
-- **`lib/seed.ts`**: all seeded demo content lives here.
-- **`lib/schemas.ts`**: Zod schemas validate every row on the way **out** of the
-  DB, so bad data fails loud.
-- **`lib/connectors/*`**: 20+ connector groups (email/IMAP, Slack, Stripe,
-  Notion, calendar, CRM, social, and more). Each returns a typed
-  `ConnectorStatus` of `connected`, `not_configured`, or `error`: always the
-  truth, never a fake green light.
-- **`lib/agents/*`**: every seeded agent maps one-to-one to a runtime agent with
-  a real `run()`; runs persist and surface on `/agents`.
-
-New data means a new repo method, a Zod schema, a seed entry, and a test. Keep
-it that way.
-
----
-
-## Knowledge layer: G-Brain and Optimal Engine
-
-The `/brain` graph you see in the demo is the visible surface of a two-part
-knowledge system that powers the production build.
-
-### G-Brain, the knowledge base
-
-Plain **Markdown files are the source of truth**. They're chunked and embedded
-into a vector store, so one store answers both **keyword** and **semantic**
-queries (hybrid retrieval with reciprocal-rank fusion). If the vector backend is
-unreachable, retrieval falls back to a local grep over the markdown: fewer
-smarts, zero downtime. The demo ships a stub provider; the production provider
-reads a live markdown store and a vector index.
-
-### Optimal Engine, the governed memory runtime
-
-Where G-Brain stores documents, **Optimal Engine governs what the OS actually
-"knows."** It's the system of record for memory, organized as a
-**Tenant, Organization, Workspace, Node** topology, with a disciplined truth
-lifecycle:
-
-```
-Source -> Signal -> Claim -> Fact -> Memory
-```
-
-Raw sources produce signals; signals become claims; claims are reviewed and
-promoted into verified facts; facts distill into durable memories the agents
-draw on. Agents may write sources, signals, and pending claims, but **facts are
-promotion-gated**: nothing becomes "known" without passing review. That keeps
-the OS's memory trustworthy as it scales across workspaces.
-
-Together: **G-Brain is the library; Optimal Engine is the librarian and the
-system of record.** The agents query both before they act.
-
----
-
-## The full plan (production)
-
-The demo is self-contained (Next.js plus seeded SQLite). The production build
-keeps the same repo-layer contract and swaps in real backends:
-
-- **Hosting: [Railway](https://railway.app).** The Next.js app deploys as a
-  Railway service; the seeded SQLite store is replaced by a managed database,
-  and the knowledge services (G-Brain retrieval and Optimal Engine) run as
-  companion services alongside it. Env vars are managed per environment.
-- **Knowledge: G-Brain and Optimal Engine** become the live knowledge and memory
-  layer behind `/brain` and every agent.
-- **Connectors go live.** Because each connector already reports honest status,
-  wiring a real source (IMAP inboxes, Slack, Stripe, Notion, a CRM, calendar,
-  social) is just supplying credentials. The UI immediately reflects real state
-  instead of seeded data.
-- **Agents run for real.** Each agent's `run()` executes against the live
-  connectors and the knowledge layer, on a schedule, with runs persisted.
-
-Same interface you see in this demo, backed by your real business instead of
-placeholder data.
-
----
-
-## Project structure
-
-```
-app/                 Next.js App Router; one folder per view plus /api routes
-components/          UI: dashboard sections, graphs, terminal primitives
-lib/
-  data.ts db.ts      repository layer plus app DB singleton
-  seed.ts            all seeded demo content
-  schemas.ts         Zod schemas (validate every DB/API boundary)
-  connectors/        20+ honest-status integrations
-  agents/            agent registry plus runtimes
-  knowledge-graph.ts, memory-core.ts   brain graph plus memory model
-scripts/             seed plus doc-generation scripts
-tests/               vitest suite (one file per module)
-```
-
----
-
-## Configuration
-
-All configuration is via environment variables. Copy `.env.example` to
-`.env.local` and fill in only what you want to wire up; everything else stays in
-honest "not configured" mode. `.env.local` is gitignored.
-
-**Never commit real keys.** The demo runs fully without any of them.
-
----
-
-## Tech stack
-
-- **Next.js 14** (App Router, server components) plus **TypeScript**
-- **Tailwind CSS**: monochrome "Monolith" theme with pickable colorways
-- **better-sqlite3**: seeded local store (WAL)
-- **Zod**: schema validation at every boundary
-- **Vitest**: test suite
-- **Vercel AI SDK**: agent LLM calls
-- **d3-force**, **lucide-react**, **simple-icons**: graph physics and iconography
-
----
-
-## Testing
-
-```bash
-npm test          # run the full vitest suite
-npm run typecheck # tsc --noEmit
-```
-
-Tests live in `tests/`, one file per module, using an in-memory SQLite pattern
-so they never touch the seeded dev DB.
-
----
-
-## Deploying to Railway
-
-1. Create a Railway project and point it at this repo.
-2. Set the build command to `npm run build` and the start command to `npm start`
-   (the app serves on the `PORT` Railway provides).
-3. Add a database service and any connector credentials as environment variables
-   in the Railway dashboard.
-4. Deploy. The knowledge services (G-Brain and Optimal Engine) run as companion
-   services and are referenced by URL from the app's environment.
-
----
-
-## Note on the demo data
-
-This is a demo build. All names, companies, clients, financial figures, and
-social numbers are **placeholder data**. Nothing here is real.
-
-## License
-
-MIT. See [`LICENSE`](LICENSE).
-
----
-
-Built as the reference implementation for **Founder OS**.
-[founderos.example.com](https://www.founderos.example.com)
+Unauthorized distribution, copying, or deployment of this software is strictly prohibited.

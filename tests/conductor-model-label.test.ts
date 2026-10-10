@@ -26,7 +26,7 @@ describe('the Conductor header states the real model', () => {
 
   test('the header renders the model prop', () => {
     const src = read('components/ConductorChat.tsx');
-    const header = src.slice(src.indexOf('CONDUCTOR'), src.indexOf('CONDUCTOR') + 600);
+    const header = src.slice(src.indexOf('OPERATOR'), src.indexOf('OPERATOR') + 600);
     expect(header).toContain('{model');
   });
 

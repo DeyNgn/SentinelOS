@@ -70,8 +70,8 @@ describe('/tasks mock-5f: board queue', () => {
     expect(board).toMatch(/open board/i);
   });
 
-  test('routing chips route the composer: Conductor routes / TECH / Sales', () => {
-    expect(board).toContain("'Conductor routes'");
+  test('routing chips route the composer: Operator routes / TECH / Sales', () => {
+    expect(board).toContain("'Operator routes'");
     expect(board).toContain("'TECH'");
     expect(board).toContain("'Sales'");
     expect(board).toContain('chipClass('); // the Brand Deals pills (2026-09-24)

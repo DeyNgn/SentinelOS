@@ -1,21 +1,20 @@
 /**
- * FounderOS cohort invite — the demo's one growth surface.
+ * Local operations CTA for the live shell.
  *
  * Two placements share this module so the copy and the URL can never drift:
- *  - `CohortModal`  — a one-time welcome pop-up on the home screen, the first
- *                     time someone clones the repo and runs `npm run dev`.
+ *  - `CohortModal` — a one-time welcome pop-up on the home screen.
  *  - `CohortBanner` — a permanent footer CTA under every view.
  */
 
 /** Where both placements send people. */
-export const COHORT_URL = 'https://founderos.example.com';
+export const COHORT_URL = 'https://deyengineering.com/home';
 
 /** The line that sits at the bottom of every page. */
 export const COHORT_CTA =
-  'Want help setting this up? Go to the FounderOS cohort to learn how to build the entire thing end-to-end and get it into production.';
+  'Local SectionOS operations console. Keep this shell aligned with the active operator and mission.';
 
 /** localStorage flag — set once the welcome pop-up has been dismissed. */
-export const COHORT_STORAGE_KEY = 'founderos-cohort-invite';
+export const COHORT_STORAGE_KEY = 'deyengineering-cohort-invite';
 
 /** Value written on dismissal (any non-null value suppresses the pop-up). */
 export const COHORT_SEEN = 'seen';

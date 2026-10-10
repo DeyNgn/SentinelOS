@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { ConductorEmblem } from '@/components/ConductorEmblem';
-import { ConductorComposer } from '@/components/ConductorComposer';
+import { ConductorComposer, type VoiceActivity } from '@/components/ConductorComposer';
 import { Synthesizing } from '@/components/Synthesizing';
 
 /**
@@ -28,6 +28,7 @@ export function ConductorChat({
   model = null,
   boardUrl = null,
   bare = false,
+  onVoiceActivity,
 }: {
   model?: string | null;
   /** the Paperclip board URL, for the open-on-board link (null when unset) */
@@ -35,6 +36,7 @@ export function ConductorChat({
   /** Rendered inside another framed panel (the /chats hub): drop the own
       border + rounding so the shell doesn't double-frame it. */
   bare?: boolean;
+  onVoiceActivity?: (activity: VoiceActivity) => void;
 }) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [sending, setSending] = useState(false); // POST in flight (a second or two)
@@ -133,19 +135,19 @@ export function ConductorChat({
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <span aria-hidden className="h-1.5 w-1.5 shrink-0 animate-pulse bg-os-ok" />
-            <span className="text-[13px] font-bold tracking-[0.12em]">CONDUCTOR</span>
+            <span className="text-[13px] font-bold tracking-[0.12em]">OPERATOR</span>
             <span className="rounded-full border border-os-border px-1.5 py-0.5 font-mono text-[8.5px] text-os-dim">
               board · {model ?? 'model unknown'}
             </span>
           </div>
           <div className="font-mono text-[10px] text-os-dim">
-            the real CEO on the company board · delegates, creates tasks, reads your data
+            AI operations lead on the company board · delegates, creates tasks, reads your data
           </div>
         </div>
         <div className="ml-auto flex shrink-0 items-center gap-2.5">
           {awaiting && (
             <span className="font-mono text-[9.5px] uppercase tracking-wider text-os-warn">
-              CEO working
+              Operator working
             </span>
           )}
           {boardUrl && (
@@ -173,7 +175,7 @@ export function ConductorChat({
             ) : (
               <div key={t.id} className="text-left">
                 <div className="mb-0.5 font-mono text-[9.5px] uppercase tracking-wider text-os-accent">
-                  → Conductor · board
+                  → Operator · board
                 </div>
                 <span className="inline-block max-w-[85%] whitespace-pre-wrap break-words rounded-md bg-os-raised px-2.5 py-1 text-[11.5px] text-os-muted">
                   {t.content}
@@ -184,7 +186,7 @@ export function ConductorChat({
           {awaiting && (
             <div className="text-left" data-thinking>
               <div className="mb-0.5 font-mono text-[9.5px] uppercase tracking-wider text-os-accent">
-                → Conductor · board
+                → Operator · board
               </div>
               <span className="inline-flex items-center rounded-xl bg-os-raised px-3 py-2">
                 <Synthesizing since={awaitingSinceRef.current} />
@@ -202,6 +204,7 @@ export function ConductorChat({
           model={model}
           lastReply={lastReply}
           onError={setError}
+          onVoiceActivity={onVoiceActivity}
         />
       </div>
       {error && <p className="mt-1.5 shrink-0 font-mono text-[10px] text-os-err">⚠ {error}</p>}

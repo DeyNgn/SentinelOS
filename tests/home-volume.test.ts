@@ -52,9 +52,9 @@ describe('one meter, two pages', () => {
   test('Brand Deals and Home draw the same VolumeMeter', () => {
     expect(read('components/brand-deals/DealBoard.tsx')).toContain("from '@/components/VolumeMeter'");
     // Home draws it through the kit's MeterStack, which renders VolumeMeter.
-    expect(read('app/page.tsx')).toContain('<MeterStack');
+    expect(read('components/OverviewDashboard.tsx')).toContain('<MeterStack');
     expect(read('components/slab.tsx')).toContain('<VolumeMeter');
-    expect(read('app/page.tsx')).toContain('Operating volume');
+    expect(read('components/OverviewDashboard.tsx')).toContain('Operating volume');
   });
   test('the sweep-out keyframe is global so the bars grow on Home too', () => {
     expect(read('app/globals.css')).toMatch(/@keyframes vol-meter-in/);
@@ -95,7 +95,7 @@ describe('Home second row: the Brand Deals activity line, mix dots and insight',
 });
 
 describe('Home counts what got done, not what fits on the ledger (review 2026-09-24)', () => {
-  const page = readFileSync(path.join(process.cwd(), 'app/page.tsx'), 'utf8');
+  const page = readFileSync(path.join(process.cwd(), 'components/OverviewDashboard.tsx'), 'utf8');
   test('the done count is runs OK today plus charges today, taken before the ledger is trimmed', () => {
     expect(page).toMatch(/const doneCount = vol\.runsToday - vol\.failedToday \+ doneCharges\.length/);
     expect(page).toContain('doneToday: doneCount');

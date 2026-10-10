@@ -9,8 +9,8 @@ describe('public demo refresh', () => {
     expect(read('app/layout.tsx')).not.toContain('<PageSpotlight />');
   });
   test('home uses the current slab with the generic demo operator', () => {
-    expect(read('app/page.tsx')).toContain('os-slab');
-    expect(read('app/page.tsx')).not.toMatch(/Bennett|Merydian|bennettspooner/);
+    expect(read('components/OverviewDashboard.tsx')).toContain('os-slab');
+    expect(read('components/OverviewDashboard.tsx')).not.toMatch(/Bennett|Merydian|bennettspooner/);
   });
 });
 

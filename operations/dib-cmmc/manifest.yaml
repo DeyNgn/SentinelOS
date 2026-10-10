@@ -1,0 +1,14 @@
+id: dib-cmmc
+name: DIB CMMC
+active: true
+shops:
+  - S2 Intelligence
+  - S3 Operations
+  - S9 Civil Affairs
+required_tools:
+  - cmmc
+  - nist
+  - audit
+agent_swarms:
+  - Compliance Watch
+  - Enclave Control
